@@ -1,0 +1,2447 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ngoc 🍀🍀🍀🍀 - Sổ Tay Cá Nhân & Sức Khoẻ</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Quicksand & Be Vietnam Pro -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #fff1f5 0%, #ffe4ec 50%, #fdf2f8 100%);
+      --accent-color: #ec4899;
+      --accent-soft: #fce7f3;
+      --text-main: #1e293b;
+      --glass-bg: rgba(255, 255, 255, 0.78);
+      --glass-border: rgba(255, 255, 255, 0.88);
+    }
+
+    /* Themes for 4 Seasons */
+    body.season-spring {
+      --bg-gradient: linear-gradient(135deg, #fff0f5 0%, #ffe4ee 48%, #fff8fa 100%);
+      --accent-color: #e11d48;
+      --accent-soft: #ffe4e6;
+    }
+    body.season-summer {
+      --bg-gradient: linear-gradient(135deg, #fefce8 0%, #ecfccb 52%, #d9f99d 100%);
+      --accent-color: #15803d;
+      --accent-soft: #dcfce7;
+    }
+    body.season-autumn {
+      --bg-gradient: linear-gradient(135deg, #fffbeb 0%, #ffedd5 50%, #fed7aa 100%);
+      --accent-color: #c2410c;
+      --accent-soft: #ffedd5;
+    }
+    body.season-winter {
+      --bg-gradient: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%);
+      --accent-color: #0369a1;
+      --accent-soft: #e0f2fe;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Be Vietnam Pro', sans-serif;
+    }
+
+    h1, h2, h3, .font-display {
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      transition: background 0.8s ease;
+      overflow-x: hidden;
+    }
+
+    /* Glassmorphism panels */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 32px rgba(15, 23, 42, 0.06);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .glass-card-hover:hover {
+      box-shadow: 0 12px 36px rgba(15, 23, 42, 0.1);
+    }
+
+    /* Seasonal Background Layer */
+    #season-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Summer Ancient Tree & Sunbeams Overlay */
+    #summer-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      overflow: hidden;
+    }
+    body.season-summer #summer-overlay {
+      opacity: 1;
+    }
+
+    @keyframes sunRaySway {
+      0%, 100% { transform: rotate(-18deg) scaleY(1); opacity: 0.45; }
+      50% { transform: rotate(-13deg) scaleY(1.06); opacity: 0.7; }
+    }
+    @keyframes leafBreeze {
+      0%, 100% { transform: rotate(0deg) translateY(0px); }
+      50% { transform: rotate(1.5deg) translateY(-3px); }
+    }
+    .sun-beam {
+      transform-origin: top left;
+      animation: sunRaySway 7s ease-in-out infinite;
+    }
+    .tree-canopy {
+      transform-origin: bottom right;
+      animation: leafBreeze 6s ease-in-out infinite;
+    }
+
+    /* Lotus Glow Animation for Vegetarian Days */
+    @keyframes lotusPulse {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(236, 72, 153, 0.45)); }
+      50% { transform: scale(1.13); filter: drop-shadow(0 0 10px rgba(244, 114, 182, 0.85)); }
+    }
+    .lotus-badge {
+      animation: lotusPulse 2.8s ease-in-out infinite;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.45);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 116, 139, 0.65);
+    }
+
+    /* Tab Active Indicator */
+    .nav-btn.active {
+      background-color: var(--accent-color);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    }
+  </style>
+</head>
+<body class="season-spring">
+
+  <!-- Animated Canvas for Spring Blossoms, Autumn Leaves, Winter Snow, and Summer Fireflies -->
+  <canvas id="season-canvas"></canvas>
+
+  <!-- Summer Exclusive Artwork: Ancient Tree & Sunbeams -->
+  <div id="summer-overlay" aria-hidden="true">
+    <div style="position:absolute; top:-90px; left:-90px; width:420px; height:420px; border-radius:50%; background:radial-gradient(circle, rgba(254,240,138,0.85) 0%, rgba(253,224,71,0.28) 45%, rgba(255,255,255,0) 75%);"></div>
+    <svg class="w-full h-full" viewBox="0 0 1440 900" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="beamGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#fef08a" stop-opacity="0.65"/>
+          <stop offset="60%" stop-color="#fde047" stop-opacity="0.22"/>
+          <stop offset="100%" stop-color="#fef9c3" stop-opacity="0"/>
+        </linearGradient>
+        <radialGradient id="canopyGrad1" cx="40%" cy="35%" r="60%">
+          <stop offset="0%" stop-color="#84cc16"/>
+          <stop offset="55%" stop-color="#4d7c0f"/>
+          <stop offset="100%" stop-color="#365314"/>
+        </radialGradient>
+        <radialGradient id="canopyGrad2" cx="35%" cy="30%" r="65%">
+          <stop offset="0%" stop-color="#bef264"/>
+          <stop offset="60%" stop-color="#65a30d"/>
+          <stop offset="100%" stop-color="#3f6212"/>
+        </radialGradient>
+      </defs>
+
+      <!-- Diagonal Sunbeams -->
+      <polygon class="sun-beam" points="-50,0 180,0 920,900 540,900" fill="url(#beamGrad)" />
+      <polygon class="sun-beam" style="animation-delay:-2.5s" points="220,0 380,0 1280,900 1020,900" fill="url(#beamGrad)" />
+      <polygon class="sun-beam" style="animation-delay:-4.5s" points="-80,160 60,120 640,900 320,900" fill="url(#beamGrad)" />
+
+      <!-- Ancient Banyan/Oak Tree (Cây Cổ Thụ) in Bottom-Right -->
+      <g transform="translate(960, 250)">
+        <ellipse cx="320" cy="655" rx="340" ry="55" fill="#4d7c0f" opacity="0.35"/>
+        <path d="M275,650 C285,540 295,450 285,360 C275,280 230,235 175,205 L195,185 C245,212 282,248 302,295 C312,240 315,195 305,155 L335,155 C342,205 338,255 328,305 C355,265 395,235 445,215 L458,238 C405,260 365,295 342,355 C330,445 342,545 365,650 Z" fill="#5c3a21" opacity="0.58"/>
+        <path d="M165,260 Q162,330 168,385 M195,270 Q192,350 196,410 M415,265 Q418,335 412,390" stroke="#5c3a21" stroke-width="2.5" fill="none" opacity="0.4"/>
+        <g class="tree-canopy">
+          <circle cx="220" cy="185" r="115" fill="url(#canopyGrad1)" opacity="0.52"/>
+          <circle cx="385" cy="180" r="120" fill="url(#canopyGrad1)" opacity="0.52"/>
+          <circle cx="305" cy="125" r="135" fill="url(#canopyGrad2)" opacity="0.58"/>
+          <circle cx="150" cy="225" r="85" fill="url(#canopyGrad2)" opacity="0.48"/>
+          <circle cx="445" cy="225" r="90" fill="url(#canopyGrad2)" opacity="0.48"/>
+          <circle cx="245" cy="105" r="65" fill="#fef08a" opacity="0.28"/>
+          <circle cx="170" cy="175" r="48" fill="#fef08a" opacity="0.24"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Main App Container -->
+  <div class="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6">
+    
+    <!-- Top Header Bar -->
+    <header class="glass-card rounded-3xl p-4 sm:px-6 sm:py-4 mb-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div id="brand-icon-box" class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shadow-sm bg-white/90 border border-white">
+            🌸
+          </div>
+          <div>
+            <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-800 flex items-center gap-1.5">
+              Ngoc 🍀🍀🍀🍀
+            </h1>
+            <p id="today-summary-text" class="text-xs sm:text-sm text-slate-600 font-medium">
+              Đang tải lịch hôm nay...
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Switcher, Language & Season Controls -->
+      <div class="flex flex-wrap items-center justify-between lg:justify-end gap-2.5">
+        <!-- Language Toggle (VN / DE) -->
+        <div class="flex items-center bg-white/70 p-1 rounded-2xl border border-white/80 shadow-inner" title="Ngôn ngữ / Sprache">
+          <button onclick="setLanguage('vi')" id="lang-btn-vi" class="px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all">
+            🇻🇳 VN
+          </button>
+          <button onclick="setLanguage('de')" id="lang-btn-de" class="px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all">
+            🇩🇪 DE
+          </button>
+        </div>
+
+        <!-- Main View Tabs -->
+        <nav class="flex flex-wrap items-center bg-white/60 p-1 rounded-2xl border border-white/80 shadow-inner">
+          <button onclick="switchView('weekly')" id="tab-weekly" class="nav-btn active px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5">
+            <span>📅</span> <span id="tab-label-weekly">Lịch Tuần & To-Do</span>
+          </button>
+          <button onclick="switchView('yearly')" id="tab-yearly" class="nav-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:bg-white/70 transition-all flex items-center gap-1.5">
+            <span>🗓️</span> <span id="tab-label-yearly">Lịch Cả Năm</span>
+          </button>
+          <button onclick="switchView('goals')" id="tab-goals" class="nav-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:bg-white/70 transition-all flex items-center gap-1.5">
+            <span>🎯</span> <span id="tab-label-goals">Mục Tiêu Năm</span>
+          </button>
+          <button onclick="switchView('health')" id="tab-health" class="nav-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:bg-white/70 transition-all flex items-center gap-1.5">
+            <span>💖</span> <span id="tab-label-health">Sức Khoẻ</span>
+          </button>
+        </nav>
+
+        <!-- 4 Seasons Switcher -->
+        <div class="flex items-center bg-white/60 p-1 rounded-2xl border border-white/80">
+          <button onclick="setSeason('spring', true)" data-season="spring" id="season-btn-spring" class="season-btn px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all">
+            🌸 Xuân
+          </button>
+          <button onclick="setSeason('summer', true)" data-season="summer" id="season-btn-summer" class="season-btn px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all">
+            ☀️ Hạ
+          </button>
+          <button onclick="setSeason('autumn', true)" data-season="autumn" id="season-btn-autumn" class="season-btn px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all">
+            🍂 Thu
+          </button>
+          <button onclick="setSeason('winter', true)" data-season="winter" id="season-btn-winter" class="season-btn px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all">
+            ❄️ Đông
+          </button>
+          <button onclick="enableAutoSeason()" id="auto-season-btn" class="ml-1 px-2 py-1.5 rounded-xl text-[11px] font-medium text-slate-500 hover:text-slate-800 hover:bg-white/70 transition-all">
+            Tự động
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 1: WEEKLY CALENDAR & CUSTOM STICKER TO-DO                        -->
+    <!-- ===================================================================== -->
+    <main id="view-weekly" class="space-y-5">
+      <section class="glass-card rounded-3xl p-4 sm:px-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex items-center gap-2.5">
+          <button onclick="changeWeek(-1)" class="p-2.5 rounded-2xl bg-white/80 hover:bg-white text-slate-700 shadow-sm transition active:scale-95">
+            ◀
+          </button>
+          <button onclick="goToCurrentWeek()" id="btn-today-week" class="px-4 py-2 rounded-2xl bg-white/90 hover:bg-white text-slate-800 text-xs sm:text-sm font-bold shadow-sm transition active:scale-95">
+            Hôm nay
+          </button>
+          <button onclick="changeWeek(1)" class="p-2.5 rounded-2xl bg-white/80 hover:bg-white text-slate-700 shadow-sm transition active:scale-95">
+            ▶
+          </button>
+          <div class="ml-2">
+            <h2 id="week-range-title" class="text-base sm:text-lg font-bold text-slate-800">Tuần này</h2>
+            <p id="week-lunar-summary" class="text-xs text-slate-500">Âm lịch & Nhắc nhở ăn chay</p>
+          </div>
+        </div>
+
+        <!-- Custom Sticker Palette & Creator -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span id="sticker-palette-label" class="text-xs font-semibold text-slate-600 mr-1">Nhãn dán của Ngọc:</span>
+          <div id="sticker-palette-preview" class="flex flex-wrap items-center gap-1.5"></div>
+          <button onclick="openStickerModal()" id="btn-create-sticker" class="px-3 py-1.5 rounded-full text-xs font-bold bg-slate-800 text-white hover:bg-slate-700 transition shadow-sm flex items-center gap-1">
+            <span>+ Tạo nhãn dán</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 7-Day Weekly Grid (Mon to Sun) -->
+      <section id="weekly-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-3.5"></section>
+    </main>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 2: FULL YEAR CALENDAR & APPOINTMENTS                             -->
+    <!-- ===================================================================== -->
+    <main id="view-yearly" class="hidden space-y-5">
+      <section class="glass-card rounded-3xl p-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <button onclick="changeYear(-1)" class="p-2.5 rounded-2xl bg-white/80 hover:bg-white text-slate-700 shadow-sm font-bold">◀</button>
+          <h2 id="yearly-title" class="text-xl sm:text-2xl font-bold text-slate-800">Năm 2026</h2>
+          <button onclick="changeYear(1)" class="p-2.5 rounded-2xl bg-white/80 hover:bg-white text-slate-700 shadow-sm font-bold">▶</button>
+          <button onclick="jumpToCurrentYear()" id="btn-this-year" class="ml-2 px-3.5 py-2 rounded-2xl bg-white/80 hover:bg-white text-xs font-bold text-slate-700 shadow-sm">
+            Năm nay
+          </button>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-4 text-xs font-medium text-slate-600">
+          <span class="flex items-center gap-1.5"><span class="text-base">🪷</span> <span id="legend-veg-text">Ngày ăn chay (1, 15, 30 ÂL)</span></span>
+          <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span> <span id="legend-appt-text">Có lịch hẹn</span></span>
+          <button onclick="openAppointmentModal(getTodayStr())" id="btn-add-appt-yearly" class="px-4 py-2 rounded-2xl text-white font-bold shadow-sm transition hover:opacity-95" style="background-color: var(--accent-color)">
+            + Thêm lịch hẹn mới
+          </button>
+        </div>
+      </section>
+
+      <!-- 12 Months Grid -->
+      <section id="yearly-months-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></section>
+    </main>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 3: YEARLY GOALS (MỤC TIÊU NĂM / JAHRESZIELE)                     -->
+    <!-- ===================================================================== -->
+    <main id="view-goals" class="hidden space-y-5">
+      <section class="glass-card rounded-3xl p-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <button onclick="changeGoalYear(-1)" class="p-2.5 rounded-2xl bg-white/80 hover:bg-white text-slate-700 shadow-sm font-bold">◀</button>
+          <div>
+            <h2 id="goals-year-title" class="text-xl sm:text-2xl font-bold text-slate-800">🎯 Mục Tiêu Năm 2026</h2>
+            <p id="goals-subtitle" class="text-xs text-slate-500">Lập kế hoạch, theo dõi và chinh phục ước mơ của Ngọc</p>
+          </div>
+          <button onclick="changeGoalYear(1)" class="p-2.5 rounded-2xl bg-white/80 hover:bg-white text-slate-700 shadow-sm font-bold">▶</button>
+        </div>
+
+        <button onclick="openGoalModal()" id="btn-open-goal-modal" class="px-4 py-2.5 rounded-2xl text-white text-xs sm:text-sm font-bold shadow-md transition hover:opacity-95 flex items-center gap-1.5 self-start sm:self-auto" style="background-color: var(--accent-color)">
+          <span>+ Thêm mục tiêu mới</span>
+        </button>
+      </section>
+
+      <!-- Yearly Goals Overview Summary Cards -->
+      <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="glass-card rounded-3xl p-4 sm:p-5 flex items-center justify-between">
+          <div>
+            <p id="goal-stat-total-label" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tổng mục tiêu</p>
+            <h3 id="goal-stat-total" class="text-2xl sm:text-3xl font-bold text-slate-800 mt-1">0</h3>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl">✨</div>
+        </div>
+
+        <div class="glass-card rounded-3xl p-4 sm:p-5 flex items-center justify-between">
+          <div>
+            <p id="goal-stat-done-label" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Đã hoàn thành</p>
+            <h3 id="goal-stat-done" class="text-2xl sm:text-3xl font-bold text-emerald-600 mt-1">0</h3>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl">🏆</div>
+        </div>
+
+        <div class="glass-card rounded-3xl p-4 sm:p-5 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <p id="goal-stat-avg-label" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tiến độ trung bình</p>
+            <span id="goal-stat-avg" class="text-lg font-bold" style="color: var(--accent-color)">0%</span>
+          </div>
+          <div class="w-full h-3 bg-white/80 rounded-full overflow-hidden mt-3 border border-white">
+            <div id="goal-stat-avg-bar" class="h-full rounded-full transition-all duration-500" style="width: 0%; background-color: var(--accent-color)"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Goals List Grid -->
+      <section id="goals-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></section>
+    </main>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 4: HEALTH TRACKER (STEPS & MENSTRUAL CYCLE)                      -->
+    <!-- ===================================================================== -->
+    <main id="view-health" class="hidden space-y-5">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        
+        <!-- SECTION 1: DAILY STEP COUNTER -->
+        <section class="glass-card rounded-3xl p-5 sm:p-6 flex flex-col justify-between space-y-5">
+          <div class="flex items-center justify-between">
+            <div>
+              <span id="health-step-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">Vận động mỗi ngày</span>
+              <h2 id="health-step-title" class="text-xl font-bold text-slate-800 mt-1.5">👟 Số Bước Chân Hôm Nay</h2>
+            </div>
+            <button onclick="openStepGoalModal()" class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-white/80 hover:bg-white text-slate-600 border border-slate-200">
+              <span id="health-step-goal-prefix">Mục tiêu:</span> <span id="step-goal-label" class="font-bold text-slate-800">8,000</span>
+            </button>
+          </div>
+
+          <!-- Circular Ring + Quick Add -->
+          <div class="flex flex-col sm:flex-row items-center justify-around gap-6 py-2">
+            <div class="relative w-44 h-44 flex items-center justify-center">
+              <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="11" />
+                <circle id="step-progress-ring" cx="60" cy="60" r="50" fill="none" stroke="#10b981" stroke-width="11" stroke-linecap="round"
+                  stroke-dasharray="314.16" stroke-dashoffset="314.16" style="transition: stroke-dashoffset 0.6s ease;" />
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                <span class="text-2xl">🚶‍♀️</span>
+                <span id="today-steps-display" class="text-2xl font-bold text-slate-800">0</span>
+                <span id="step-percent-display" class="text-xs font-semibold text-emerald-700">0% mục tiêu</span>
+              </div>
+            </div>
+
+            <div class="flex-1 w-full space-y-3">
+              <p id="health-quick-add-label" class="text-xs font-semibold text-slate-600">Thêm nhanh số bước chân:</p>
+              <div class="grid grid-cols-3 gap-2">
+                <button onclick="addSteps(500)" class="py-2.5 px-2 rounded-2xl bg-white/90 hover:bg-emerald-50 text-emerald-700 font-bold text-xs shadow-sm border border-emerald-100 transition active:scale-95">
+                  +500
+                </button>
+                <button onclick="addSteps(1000)" class="py-2.5 px-2 rounded-2xl bg-white/90 hover:bg-emerald-50 text-emerald-700 font-bold text-xs shadow-sm border border-emerald-100 transition active:scale-95">
+                  +1,000
+                </button>
+                <button onclick="addSteps(2000)" class="py-2.5 px-2 rounded-2xl bg-white/90 hover:bg-emerald-50 text-emerald-700 font-bold text-xs shadow-sm border border-emerald-100 transition active:scale-95">
+                  +2,000
+                </button>
+              </div>
+
+              <div class="flex items-center gap-2 pt-1">
+                <input type="number" id="custom-step-input" placeholder="Nhập tổng bước hôm nay..." min="0" max="100000"
+                  class="w-full px-3.5 py-2 rounded-2xl bg-white/90 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400" />
+                <button onclick="setExactSteps()" id="btn-update-steps" class="px-4 py-2 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm whitespace-nowrap">
+                  Cập nhật
+                </button>
+              </div>
+              <p id="step-calories-info" class="text-xs text-slate-500">Ước tính: ~0 kcal • ~0.0 km</p>
+            </div>
+          </div>
+
+          <!-- 7-Day Step History Chart -->
+          <div class="bg-white/60 rounded-2xl p-4 border border-white">
+            <div class="flex items-center justify-between mb-3">
+              <h3 id="health-7day-title" class="text-xs font-bold text-slate-700 uppercase tracking-wider">Thống kê 7 ngày gần nhất</h3>
+              <span id="weekly-avg-steps" class="text-xs font-semibold text-emerald-700">TB: 0 bước/ngày</span>
+            </div>
+            <div id="step-history-bars" class="grid grid-cols-7 gap-2 items-end h-28 pt-4"></div>
+          </div>
+        </section>
+
+        <!-- SECTION 2: MENSTRUAL CYCLE TRACKER -->
+        <section class="glass-card rounded-3xl p-5 sm:p-6 flex flex-col justify-between space-y-5">
+          <div class="flex items-center justify-between">
+            <div>
+              <span id="health-cycle-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700">Chăm sóc bản thân</span>
+              <h2 id="health-cycle-title" class="text-xl font-bold text-slate-800 mt-1.5">🌸 Theo Dõi Chu Kỳ Kinh Nguyệt</h2>
+            </div>
+            <button onclick="openCycleSettingsModal()" id="btn-cycle-settings" class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-white/80 hover:bg-white text-slate-600 border border-slate-200">
+              ⚙️ Cài đặt chu kỳ
+            </button>
+          </div>
+
+          <!-- Cycle Status Banner -->
+          <div class="rounded-2xl p-4 bg-gradient-to-r from-rose-500/90 to-pink-500/90 text-white shadow-md">
+            <div class="flex items-center justify-between">
+              <div>
+                <p id="cycle-status-label" class="text-xs uppercase tracking-wider opacity-90 font-semibold">Trạng thái hiện tại</p>
+                <h3 id="cycle-current-day-title" class="text-2xl font-bold mt-0.5">Ngày thứ -- của chu kỳ</h3>
+                <p id="cycle-phase-desc" class="text-xs opacity-95 mt-1">Hãy ghi nhận ngày bắt đầu kỳ kinh gần nhất để dự đoán chính xác.</p>
+              </div>
+              <div class="text-4xl">🌷</div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5 mt-4 pt-3 border-t border-white/25 text-xs">
+              <div class="bg-white/15 rounded-xl p-2.5">
+                <span id="cycle-next-label" class="opacity-85 block">Dự đoán kỳ tiếp theo</span>
+                <strong id="next-period-date" class="text-sm font-bold">--/--/----</strong>
+              </div>
+              <div class="bg-white/15 rounded-xl p-2.5">
+                <span id="cycle-ovul-label" class="opacity-85 block">Ngày rụng trứng dự kiến</span>
+                <strong id="ovulation-date" class="text-sm font-bold">--/--/----</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Log Period & Daily Mood/Symptoms -->
+          <div class="space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 bg-white/70 p-3 rounded-2xl border border-white">
+              <div class="flex items-center gap-2">
+                <span id="cycle-last-start-label" class="text-sm font-semibold text-slate-700">Ngày bắt đầu gần nhất:</span>
+                <input type="date" id="period-start-input" class="px-2.5 py-1.5 rounded-xl bg-white border border-rose-200 text-xs font-semibold text-slate-700 focus:outline-none" />
+              </div>
+              <button onclick="savePeriodStartDate()" id="btn-save-period-start" class="px-3.5 py-1.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold shadow-sm transition">
+                Lưu ngày bắt đầu
+              </button>
+            </div>
+
+            <div class="bg-white/65 p-3.5 rounded-2xl border border-white">
+              <p id="cycle-symptoms-label" class="text-xs font-bold text-slate-700 mb-2">Cảm xúc & Triệu chứng hôm nay:</p>
+              <div id="symptom-chips" class="flex flex-wrap gap-1.5"></div>
+            </div>
+
+            <div class="bg-white/65 p-3.5 rounded-2xl border border-white">
+              <div class="flex items-center justify-between mb-2">
+                <span id="cycle-forecast-label" class="text-xs font-bold text-slate-700">Dự báo 14 ngày tới</span>
+                <div class="flex items-center gap-2 text-[11px] text-slate-500">
+                  <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-rose-500"></span><span id="cycle-legend-period">Kỳ kinh</span></span>
+                  <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-400"></span><span id="cycle-legend-ovul">Rụng trứng</span></span>
+                </div>
+              </div>
+              <div id="cycle-forecast-strip" class="grid grid-cols-7 gap-1.5 text-center"></div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODALS (APPOINTMENTS, STICKER CREATOR, YEARLY GOAL, SETTINGS)         -->
+  <!-- ===================================================================== -->
+
+  <!-- 1. Appointment Modal -->
+  <div id="appointment-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 id="modal-appt-title" class="text-lg font-bold text-slate-800">📅 Lịch Hẹn & Ghi Chú</h3>
+          <p id="modal-date-subtitle" class="text-xs text-slate-500 font-medium"></p>
+        </div>
+        <button onclick="closeModal('appointment-modal')" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 font-bold">✕</button>
+      </div>
+
+      <div id="modal-existing-appointments" class="space-y-2 max-h-44 overflow-y-auto"></div>
+
+      <div class="border-t border-slate-100 pt-3 space-y-3">
+        <p id="modal-appt-add-heading" class="text-xs font-bold text-slate-700 uppercase tracking-wider">+ Thêm lịch hẹn mới</p>
+        <input type="hidden" id="appt-date-input" />
+        <div>
+          <input type="text" id="appt-title-input" placeholder="Tên lịch hẹn (VD: Khám sức khỏe, Cà phê với bạn...)"
+            class="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <input type="time" id="appt-time-input" value="09:00"
+            class="px-3.5 py-2 rounded-2xl bg-slate-50 border border-slate-200 text-sm focus:outline-none" />
+          <select id="appt-color-input" class="px-3 py-2 rounded-2xl bg-slate-50 border border-slate-200 text-sm focus:outline-none">
+            <option value="#e11d48">🌸 Hồng (Cá nhân)</option>
+            <option value="#0284c7">💼 Xanh dương (Công việc)</option>
+            <option value="#16a34a">🥗 Xanh lá (Sức khỏe / Ăn chay)</option>
+            <option value="#d97706">✨ Vàng cam (Quan trọng)</option>
+            <option value="#7c3aed">💜 Tím (Gia đình / Hẹn hò)</option>
+          </select>
+        </div>
+        <input type="text" id="appt-note-input" placeholder="Địa điểm hoặc ghi chú thêm (không bắt buộc)"
+          class="w-full px-3.5 py-2 rounded-2xl bg-slate-50 border border-slate-200 text-sm focus:outline-none" />
+        <button onclick="saveAppointment()" id="btn-save-appt" class="w-full py-2.5 rounded-2xl text-white font-bold text-sm shadow-md transition hover:opacity-95" style="background-color: var(--accent-color)">
+          Lưu Lịch Hẹn
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Custom Sticker Creator Modal -->
+  <div id="sticker-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 id="modal-sticker-title" class="text-lg font-bold text-slate-800">🏷️ Quản Lý Nhãn Dán Tuỳ Chỉnh</h3>
+        <button onclick="closeModal('sticker-modal')" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 font-bold">✕</button>
+      </div>
+
+      <p id="modal-sticker-desc" class="text-xs text-slate-500">Tạo nhãn dán yêu thích của riêng Ngọc để gắn vào các công việc To-Do hằng ngày:</p>
+
+      <div class="grid grid-cols-4 gap-2">
+        <input type="text" id="new-sticker-emoji" value="🍀" maxlength="4" placeholder="Icon"
+          class="text-center text-xl px-2 py-2 rounded-2xl bg-slate-50 border border-slate-200 focus:outline-none" />
+        <input type="text" id="new-sticker-name" placeholder="Tên nhãn (VD: Thiền, Đọc sách...)"
+          class="col-span-3 px-3.5 py-2 rounded-2xl bg-slate-50 border border-slate-200 text-sm focus:outline-none" />
+      </div>
+
+      <div class="flex items-center justify-between gap-2">
+        <span id="modal-sticker-color-label" class="text-xs font-semibold text-slate-600">Màu nhãn:</span>
+        <div class="flex gap-2" id="sticker-color-choices">
+          <button type="button" onclick="selectStickerColor('#fce7f3','#be185d')" class="w-7 h-7 rounded-full bg-pink-200 border-2 border-pink-500"></button>
+          <button type="button" onclick="selectStickerColor('#dcfce7','#15803d')" class="w-7 h-7 rounded-full bg-green-200 border border-green-400"></button>
+          <button type="button" onclick="selectStickerColor('#e0f2fe','#0369a1')" class="w-7 h-7 rounded-full bg-sky-200 border border-sky-400"></button>
+          <button type="button" onclick="selectStickerColor('#fef3c7','#b45309')" class="w-7 h-7 rounded-full bg-amber-200 border border-amber-400"></button>
+          <button type="button" onclick="selectStickerColor('#f3e8ff','#7e22ce')" class="w-7 h-7 rounded-full bg-purple-200 border border-purple-400"></button>
+        </div>
+        <button onclick="addCustomSticker()" id="btn-add-sticker" class="px-4 py-2 rounded-2xl bg-slate-800 text-white text-xs font-bold hover:bg-slate-700">
+          + Thêm nhãn
+        </button>
+      </div>
+
+      <div class="border-t border-slate-100 pt-3">
+        <p id="modal-sticker-existing-label" class="text-xs font-bold text-slate-600 mb-2">Danh sách nhãn dán hiện có:</p>
+        <div id="modal-sticker-list" class="flex flex-wrap gap-2 max-h-40 overflow-y-auto"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Yearly Goal Create/Edit Modal -->
+  <div id="goal-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 id="goal-modal-title" class="text-lg font-bold text-slate-800">🎯 Thêm Mục Tiêu Năm</h3>
+        <button onclick="closeModal('goal-modal')" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 font-bold">✕</button>
+      </div>
+
+      <input type="hidden" id="goal-edit-id" />
+
+      <div class="space-y-3">
+        <div>
+          <label id="goal-label-title" class="text-xs font-bold text-slate-600 block mb-1">Tên mục tiêu:</label>
+          <input type="text" id="goal-input-title" placeholder="VD: Đọc 12 cuốn sách, Học tiếng Đức B2..."
+            class="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5">
+          <div>
+            <label id="goal-label-category" class="text-xs font-bold text-slate-600 block mb-1">Danh mục:</label>
+            <select id="goal-input-category" class="w-full px-3 py-2 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-semibold focus:outline-none">
+              <option value="health">💖 Sức khoẻ</option>
+              <option value="career">💼 Sự nghiệp / Học tập</option>
+              <option value="finance">💰 Tài chính</option>
+              <option value="personal">🌱 Phát triển bản thân</option>
+              <option value="travel">✈️ Du lịch / Trải nghiệm</option>
+            </select>
+          </div>
+          <div>
+            <label id="goal-label-deadline" class="text-xs font-bold text-slate-600 block mb-1">Hạn hoàn thành:</label>
+            <input type="date" id="goal-input-deadline" class="w-full px-3 py-2 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-semibold focus:outline-none" />
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label id="goal-label-progress" class="text-xs font-bold text-slate-600">Tiến độ hiện tại:</label>
+            <span id="goal-progress-preview" class="text-xs font-bold text-rose-600">0%</span>
+          </div>
+          <input type="range" id="goal-input-progress" min="0" max="100" step="5" value="0"
+            oninput="document.getElementById('goal-progress-preview').textContent = this.value + '%'"
+            class="w-full accent-rose-500 cursor-pointer" />
+        </div>
+
+        <div>
+          <label id="goal-label-note" class="text-xs font-bold text-slate-600 block mb-1">Ghi chú & Bước hành động:</label>
+          <textarea id="goal-input-note" rows="2" placeholder="Chi tiết kế hoạch thực hiện..."
+            class="w-full px-3.5 py-2 rounded-2xl bg-slate-50 border border-slate-200 text-xs focus:outline-none"></textarea>
+        </div>
+
+        <button onclick="saveGoal()" id="btn-save-goal" class="w-full py-2.5 rounded-2xl text-white font-bold text-sm shadow-md transition hover:opacity-95" style="background-color: var(--accent-color)">
+          Lưu Mục Tiêu
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Step Goal & Cycle Settings Modal -->
+  <div id="settings-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 id="settings-modal-title" class="text-lg font-bold text-slate-800">⚙️ Cài Đặt</h3>
+        <button onclick="closeModal('settings-modal')" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 font-bold">✕</button>
+      </div>
+      <div id="settings-modal-body" class="space-y-3"></div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-800 text-white px-4 py-2.5 rounded-2xl shadow-xl text-xs sm:text-sm font-medium flex items-center gap-2">
+    <span id="toast-icon">🍀</span>
+    <span id="toast-msg">Đã lưu!</span>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       1. BILINGUAL DICTIONARY (VIETNAMESE / GERMAN) & APP STATE
+       ========================================================================== */
+    const STORAGE_KEY = 'ngoc_clover_planner_v2';
+
+    const I18N = {
+      vi: {
+        tabWeekly: 'Lịch Tuần & To-Do',
+        tabYearly: 'Lịch Cả Năm',
+        tabGoals: 'Mục Tiêu Năm',
+        tabHealth: 'Sức Khoẻ',
+        seasonSpring: '🌸 Xuân',
+        seasonSummer: '☀️ Hạ',
+        seasonAutumn: '🍂 Thu',
+        seasonWinter: '❄️ Đông',
+        seasonAuto: 'Tự động',
+        todayVegBadge: ' • 🪷 Hôm nay ăn chay',
+        lunarLabel: 'Âm lịch',
+        leapMonth: ' nhuận',
+        daysFull: ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'],
+        daysShort: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'],
+        daysMin: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
+        months: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+        btnToday: 'Hôm nay',
+        weekPrefix: 'Tuần',
+        vegWeekSummary: '🪷 Nhắc nhở ăn chay tuần này:',
+        noVegWeekSummary: 'Không có ngày mùng 1, 15, 30 Âm lịch trong tuần này',
+        stickerPaletteLabel: 'Nhãn dán của Ngọc:',
+        btnCreateSticker: '+ Tạo nhãn dán',
+        vegTag: 'Ăn chay',
+        vegTooltip: 'Ngày ăn chay (Mùng 1, Rằm 15, 30 Âm lịch)',
+        btnAddApptShort: '+ Hẹn',
+        noTodosYet: 'Chưa có việc cần làm ✨',
+        addTodoPlaceholder: '+ Thêm việc cần làm...',
+        noStickerOption: '🏷️ Không nhãn',
+        btnAdd: 'Thêm',
+        yearPrefix: 'Năm',
+        btnThisYear: 'Năm nay',
+        legendVeg: 'Ngày ăn chay (1, 15, 30 ÂL)',
+        legendAppt: 'Có lịch hẹn',
+        btnAddApptYearly: '+ Thêm lịch hẹn mới',
+        goalsYearTitle: '🎯 Mục Tiêu Năm',
+        goalsSubtitle: 'Lập kế hoạch, theo dõi và chinh phục ước mơ của Ngọc',
+        btnNewGoal: '+ Thêm mục tiêu mới',
+        goalStatTotal: 'Tổng mục tiêu',
+        goalStatDone: 'Đã hoàn thành',
+        goalStatAvg: 'Tiến độ trung bình',
+        noGoalsYet: 'Chưa có mục tiêu nào cho năm này. Hãy thêm mục tiêu đầu tiên của Ngọc nhé! 🍀',
+        goalCategories: {
+          health: { label: '💖 Sức khoẻ', bg: '#dcfce7', color: '#15803d' },
+          career: { label: '💼 Sự nghiệp / Học tập', bg: '#e0f2fe', color: '#0369a1' },
+          finance: { label: '💰 Tài chính', bg: '#fef3c7', color: '#b45309' },
+          personal: { label: '🌱 Phát triển bản thân', bg: '#f3e8ff', color: '#7e22ce' },
+          travel: { label: '✈️ Du lịch / Trải nghiệm', bg: '#fce7f3', color: '#be185d' }
+        },
+        goalDeadlinePrefix: 'Hạn:',
+        goalCompletedBadge: 'Hoàn thành',
+        btnEdit: 'Sửa',
+        btnDelete: 'Xoá',
+        goalModalAddTitle: '🎯 Thêm Mục Tiêu Năm',
+        goalModalEditTitle: '✏️ Sửa Đổi Mục Tiêu',
+        goalLabelTitle: 'Tên mục tiêu:',
+        goalPlaceholderTitle: 'VD: Đọc 12 cuốn sách, Học tiếng Đức B2...',
+        goalLabelCategory: 'Danh mục:',
+        goalLabelDeadline: 'Hạn hoàn thành:',
+        goalLabelProgress: 'Tiến độ hiện tại:',
+        goalLabelNote: 'Ghi chú & Bước hành động:',
+        goalPlaceholderNote: 'Chi tiết kế hoạch thực hiện...',
+        btnSaveGoal: 'Lưu Mục Tiêu',
+        healthStepBadge: 'Vận động mỗi ngày',
+        healthStepTitle: '👟 Số Bước Chân Hôm Nay',
+        healthStepGoalPrefix: 'Mục tiêu:',
+        stepPercentSuffix: '% mục tiêu',
+        healthQuickAddLabel: 'Thêm nhanh số bước chân:',
+        customStepPlaceholder: 'Nhập tổng bước hôm nay...',
+        btnUpdate: 'Cập nhật',
+        estimatePrefix: 'Ước tính:',
+        health7DayTitle: 'Thống kê 7 ngày gần nhất',
+        avgPrefix: 'TB:',
+        stepsPerDaySuffix: 'bước/ngày',
+        healthCycleBadge: 'Chăm sóc bản thân',
+        healthCycleTitle: '🌸 Theo Dõi Chu Kỳ Kinh Nguyệt',
+        btnCycleSettings: '⚙️ Cài đặt chu kỳ',
+        cycleStatusLabel: 'Trạng thái hiện tại',
+        cycleDayTitle: (d) => `Ngày thứ ${d} của chu kỳ`,
+        cycleNextLabel: 'Dự đoán kỳ tiếp theo',
+        cycleOvulLabel: 'Ngày rụng trứng dự kiến',
+        cycleLastStartLabel: 'Ngày bắt đầu gần nhất:',
+        btnSavePeriodStart: 'Lưu ngày bắt đầu',
+        cycleSymptomsLabel: 'Cảm xúc & Triệu chứng hôm nay:',
+        cycleForecastLabel: 'Dự báo 14 ngày tới',
+        cycleLegendPeriod: 'Kỳ kinh',
+        cycleLegendOvul: 'Rụng trứng',
+        phasePeriod: 'Đang trong kỳ kinh nguyệt: Hãy giữ ấm bụng, uống trà gừng và nghỉ ngơi nhiều nhé 💕',
+        phaseOvul: 'Giai đoạn rụng trứng: Năng lượng và tinh thần thường rạng rỡ nhất ✨',
+        phasePms: 'Giai đoạn tiền kinh nguyệt: Hạn chế đồ lạnh, ngủ sớm và thư giãn nhẹ nhàng 🌷',
+        phaseFollicular: 'Giai đoạn nang noãn: Cơ thể đang phục hồi năng lượng tích cực.',
+        symptoms: ['😊 Vui vẻ', '⚡ Năng lượng', '😴 Mệt mỏi', '😣 Đau bụng nhẹ', '🥺 Nhạy cảm', '🍫 Thèm ngọt', '🧘‍♀️ Thư giãn', '💧 Uống đủ nước'],
+        modalApptTitle: '📅 Lịch Hẹn & Ghi Chú',
+        modalApptAddHeading: '+ Thêm lịch hẹn mới',
+        apptTitlePlaceholder: 'Tên lịch hẹn (VD: Khám sức khỏe, Cà phê với bạn...)',
+        apptNotePlaceholder: 'Địa điểm hoặc ghi chú thêm (không bắt buộc)',
+        btnSaveAppt: 'Lưu Lịch Hẹn',
+        noApptsDay: 'Chưa có lịch hẹn nào trong ngày này.',
+        modalStickerTitle: '🏷️ Quản Lý Nhãn Dán Tuỳ Chỉnh',
+        modalStickerDesc: 'Tạo nhãn dán yêu thích của riêng Ngọc để gắn vào các công việc To-Do hằng ngày:',
+        stickerNamePlaceholder: 'Tên nhãn (VD: Thiền, Đọc sách...)',
+        stickerColorLabel: 'Màu nhãn:',
+        btnAddSticker: '+ Thêm nhãn',
+        stickerExistingLabel: 'Danh sách nhãn dán hiện có:',
+        stepGoalModalTitle: '👟 Mục Tiêu Bước Chân',
+        stepGoalModalDesc: 'Đặt số bước chân mục tiêu mỗi ngày của Ngọc:',
+        btnSaveGoalSteps: 'Lưu Mục Tiêu',
+        cycleSettingsTitle: '🌸 Cài Đặt Chu Kỳ',
+        cycleLenLabel: 'Độ dài chu kỳ trung bình (ngày):',
+        periodLenLabel: 'Số ngày hành kinh trung bình:',
+        btnSaveSettings: 'Lưu Cài Đặt',
+        toastLangChanged: 'Đã chuyển sang Tiếng Việt 🇻🇳',
+        toastAutoSeason: 'Đã bật tự động đổi mùa theo thời gian thực',
+        toastTodoAdded: 'Đã thêm công việc mới!',
+        toastApptSaved: 'Đã lưu lịch hẹn!',
+        toastApptDeleted: 'Đã xoá lịch hẹn',
+        toastGoalSaved: 'Đã lưu mục tiêu năm!',
+        toastGoalDeleted: 'Đã xoá mục tiêu',
+        toastEnterTitle: 'Vui lòng nhập nội dung!'
+      },
+      de: {
+        tabWeekly: 'Wochenplan & To-Do',
+        tabYearly: 'Jahreskalender',
+        tabGoals: 'Jahresziele',
+        tabHealth: 'Gesundheit',
+        seasonSpring: '🌸 Frühling',
+        seasonSummer: '☀️ Sommer',
+        seasonAutumn: '🍂 Herbst',
+        seasonWinter: '❄️ Winter',
+        seasonAuto: 'Auto',
+        todayVegBadge: ' • 🪷 Heute vegetarisch',
+        lunarLabel: 'Mondkalender',
+        leapMonth: ' Schaltmonat',
+        daysFull: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+        daysShort: ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'],
+        daysMin: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
+        months: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+        btnToday: 'Heute',
+        weekPrefix: 'Woche',
+        vegWeekSummary: '🪷 Vegetarische Tage diese Woche:',
+        noVegWeekSummary: 'Keine Mondtage (1., 15., 30.) in dieser Woche',
+        stickerPaletteLabel: 'Ngocs Sticker:',
+        btnCreateSticker: '+ Sticker erstellen',
+        vegTag: 'Vegetarisch',
+        vegTooltip: 'Vegetarischer Tag (1., 15. & 30. Mondtag)',
+        btnAddApptShort: '+ Termin',
+        noTodosYet: 'Noch keine Aufgaben ✨',
+        addTodoPlaceholder: '+ Aufgabe hinzufügen...',
+        noStickerOption: '🏷️ Kein Sticker',
+        btnAdd: 'Hinzufügen',
+        yearPrefix: 'Jahr',
+        btnThisYear: 'Dieses Jahr',
+        legendVeg: 'Vegetarischer Tag (1., 15., 30. Mondtag)',
+        legendAppt: 'Termin vorhanden',
+        btnAddApptYearly: '+ Neuer Termin',
+        goalsYearTitle: '🎯 Jahresziele',
+        goalsSubtitle: 'Plane, verfolge und erreiche deine Träume für das Jahr',
+        btnNewGoal: '+ Neues Ziel hinzufügen',
+        goalStatTotal: 'Ziele gesamt',
+        goalStatDone: 'Erreicht',
+        goalStatAvg: 'Durchschnittlicher Fortschritt',
+        noGoalsYet: 'Noch keine Ziele für dieses Jahr. Füge dein erstes Ziel hinzu! 🍀',
+        goalCategories: {
+          health: { label: '💖 Gesundheit', bg: '#dcfce7', color: '#15803d' },
+          career: { label: '💼 Karriere / Lernen', bg: '#e0f2fe', color: '#0369a1' },
+          finance: { label: '💰 Finanzen', bg: '#fef3c7', color: '#b45309' },
+          personal: { label: '🌱 Persönlichkeit', bg: '#f3e8ff', color: '#7e22ce' },
+          travel: { label: '✈️ Reisen / Erlebnisse', bg: '#fce7f3', color: '#be185d' }
+        },
+        goalDeadlinePrefix: 'Frist:',
+        goalCompletedBadge: 'Erreicht',
+        btnEdit: 'Bearbeiten',
+        btnDelete: 'Löschen',
+        goalModalAddTitle: '🎯 Neues Jahresziel',
+        goalModalEditTitle: '✏️ Jahresziel bearbeiten',
+        goalLabelTitle: 'Zieltitel:',
+        goalPlaceholderTitle: 'z.B. 12 Bücher lesen, Deutsch C1 lernen...',
+        goalLabelCategory: 'Kategorie:',
+        goalLabelDeadline: 'Zieldatum:',
+        goalLabelProgress: 'Aktueller Fortschritt:',
+        goalLabelNote: 'Notizen & Schritte:',
+        goalPlaceholderNote: 'Details zur Umsetzung...',
+        btnSaveGoal: 'Ziel speichern',
+        healthStepBadge: 'Tägliche Bewegung',
+        healthStepTitle: '👟 Heutige Schritte',
+        healthStepGoalPrefix: 'Ziel:',
+        stepPercentSuffix: '% des Ziels',
+        healthQuickAddLabel: 'Schritte schnell hinzufügen:',
+        customStepPlaceholder: 'Gesamtschritte heute eingeben...',
+        btnUpdate: 'Aktualisieren',
+        estimatePrefix: 'Schätzung:',
+        health7DayTitle: 'Statistik der letzten 7 Tage',
+        avgPrefix: 'Ø:',
+        stepsPerDaySuffix: 'Schritte/Tag',
+        healthCycleBadge: 'Selbstfürsorge',
+        healthCycleTitle: '🌸 Zyklus-Tracker',
+        btnCycleSettings: '⚙️ Zyklus-Einstellungen',
+        cycleStatusLabel: 'Aktueller Status',
+        cycleDayTitle: (d) => `Zyklustag ${d}`,
+        cycleNextLabel: 'Nächste Periode (ca.)',
+        cycleOvulLabel: 'Eisprung (ca.)',
+        cycleLastStartLabel: 'Letzter Periodenbeginn:',
+        btnSavePeriodStart: 'Datum speichern',
+        cycleSymptomsLabel: 'Stimmung & Symptome heute:',
+        cycleForecastLabel: '14-Tage-Vorschau',
+        cycleLegendPeriod: 'Periode',
+        cycleLegendOvul: 'Eisprung',
+        phasePeriod: 'Menstruationsphase: Halte dich warm, trinke Ingwertee und gönn dir Ruhe 💕',
+        phaseOvul: 'Eisprungphase: Deine Energie und Ausstrahlung sind jetzt besonders hoch ✨',
+        phasePms: 'Prämenstruelle Phase: Vermeide Kaltes, schlafe früh und entspanne dich 🌷',
+        phaseFollicular: 'Follikelphase: Dein Körper sammelt frische Energie.',
+        symptoms: ['😊 Fröhlich', '⚡ Energiegeladen', '😴 Müde', '😣 Leichte Krämpfe', '🥺 Sensibel', '🍫 Appetit auf Süßes', '🧘‍♀️ Entspannt', '💧 Genug Wasser'],
+        modalApptTitle: '📅 Termine & Notizen',
+        modalApptAddHeading: '+ Neuen Termin hinzufügen',
+        apptTitlePlaceholder: 'Termintitel (z.B. Arzttermin, Kaffee mit Freunden...)',
+        apptNotePlaceholder: 'Ort oder zusätzliche Notiz (optional)',
+        btnSaveAppt: 'Termin speichern',
+        noApptsDay: 'Keine Termine an diesem Tag.',
+        modalStickerTitle: '🏷️ Eigene Sticker verwalten',
+        modalStickerDesc: 'Erstelle eigene Sticker für deine täglichen Aufgaben:',
+        stickerNamePlaceholder: 'Sticker-Name (z.B. Meditation, Lesen...)',
+        stickerColorLabel: 'Farbe:',
+        btnAddSticker: '+ Hinzufügen',
+        stickerExistingLabel: 'Vorhandene Sticker:',
+        stepGoalModalTitle: '👟 Schrittziel',
+        stepGoalModalDesc: 'Lege dein tägliches Schrittziel fest:',
+        btnSaveGoalSteps: 'Ziel speichern',
+        cycleSettingsTitle: '🌸 Zyklus-Einstellungen',
+        cycleLenLabel: 'Durchschnittliche Zykluslänge (Tage):',
+        periodLenLabel: 'Durchschnittliche Periodendauer (Tage):',
+        btnSaveSettings: 'Einstellungen speichern',
+        toastLangChanged: 'Auf Deutsch umgestellt 🇩🇪',
+        toastAutoSeason: 'Automatischer Jahreszeitenwechsel aktiviert',
+        toastTodoAdded: 'Aufgabe hinzugefügt!',
+        toastApptSaved: 'Termin gespeichert!',
+        toastApptDeleted: 'Termin gelöscht',
+        toastGoalSaved: 'Jahresziel gespeichert!',
+        toastGoalDeleted: 'Jahresziel gelöscht',
+        toastEnterTitle: 'Bitte einen Titel eingeben!'
+      }
+    };
+
+    const DEFAULT_STICKERS = [
+      { id: 'st_1', emoji: '🍀', name: 'May mắn', nameDe: 'Glück', bg: '#dcfce7', color: '#15803d' },
+      { id: 'st_2', emoji: '💖', name: 'Yêu thích', nameDe: 'Favorit', bg: '#fce7f3', color: '#be185d' },
+      { id: 'st_3', emoji: '💼', name: 'Công việc', nameDe: 'Arbeit', bg: '#e0f2fe', color: '#0369a1' },
+      { id: 'st_4', emoji: '🪷', name: 'Ăn chay', nameDe: 'Vegetarisch', bg: '#fdf2f8', color: '#9d174d' },
+      { id: 'st_5', emoji: '🧘‍♀️', name: 'Sức khoẻ', nameDe: 'Gesundheit', bg: '#fef3c7', color: '#b45309' },
+      { id: 'st_6', emoji: '📚', name: 'Học tập', nameDe: 'Lernen', bg: '#f3e8ff', color: '#7e22ce' }
+    ];
+
+    function t() {
+      return I18N[appState.lang || 'vi'];
+    }
+
+    function getStickerDisplayName(st) {
+      if ((appState.lang || 'vi') === 'de' && st.nameDe) return st.nameDe;
+      return st.name;
+    }
+
+    function formatDateStr(dateObj) {
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const d = String(dateObj.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function parseDateStr(str) {
+      const [y, m, d] = str.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+
+    function getTodayStr() {
+      return formatDateStr(new Date());
+    }
+
+    function getMondayOfDate(d) {
+      const date = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      const day = date.getDay();
+      const diff = day === 0 ? -6 : 1 - day;
+      date.setDate(date.getDate() + diff);
+      return date;
+    }
+
+    function createInitialState() {
+      const today = new Date();
+      const currentYear = today.getFullYear();
+      const todayStr = formatDateStr(today);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
+      const tomorrowStr = formatDateStr(tomorrow);
+
+      const twoDaysLater = new Date(today);
+      twoDaysLater.setDate(today.getDate() + 2);
+      const twoDaysLaterStr = formatDateStr(twoDaysLater);
+
+      const stepsHistory = {};
+      const sampleSteps = [6400, 8200, 7500, 9100, 5800, 8600];
+      for (let i = 6; i >= 1; i--) {
+        const d = new Date(today);
+        d.setDate(today.getDate() - i);
+        stepsHistory[formatDateStr(d)] = sampleSteps[6 - i];
+      }
+      stepsHistory[todayStr] = 5200;
+
+      const samplePeriodStart = new Date(today);
+      samplePeriodStart.setDate(today.getDate() - 10);
+
+      return {
+        lang: 'vi',
+        stickers: [...DEFAULT_STICKERS],
+        todos: {
+          [todayStr]: [
+            { id: 'td_1', text: 'Uống 2 lít nước & đi bộ thư giãn', done: true, stickerId: 'st_5' },
+            { id: 'td_2', text: 'Hoàn thành kế hoạch tuần mới', done: false, stickerId: 'st_3' }
+          ],
+          [tomorrowStr]: [
+            { id: 'td_4', text: 'Chuẩn bị thực đơn thanh đạm', done: false, stickerId: 'st_4' }
+          ]
+        },
+        appointments: [
+          {
+            id: 'ap_1',
+            date: todayStr,
+            time: '18:30',
+            title: 'Gặp gỡ & thưởng trà cuối ngày 🍵',
+            color: '#e11d48',
+            note: 'Quán trà yên tĩnh gần nhà'
+          },
+          {
+            id: 'ap_2',
+            date: twoDaysLaterStr,
+            time: '09:30',
+            title: 'Tập Yoga & Thiền buổi sáng',
+            color: '#16a34a',
+            note: 'Mang theo thảm tập'
+          }
+        ],
+        goals: [
+          {
+            id: 'gl_1',
+            year: currentYear,
+            title: 'Duy trì thói quen đi bộ 8.000 bước mỗi ngày',
+            category: 'health',
+            deadline: `${currentYear}-12-31`,
+            progress: 65,
+            note: 'Đi bộ công viên buổi chiều hoặc tập nhẹ tại nhà'
+          },
+          {
+            id: 'gl_2',
+            year: currentYear,
+            title: 'Đọc xong 12 cuốn sách phát triển bản thân & ngoại ngữ',
+            category: 'personal',
+            deadline: `${currentYear}-11-30`,
+            progress: 50,
+            note: 'Mỗi tháng hoàn thành ít nhất 1 cuốn sách'
+          },
+          {
+            id: 'gl_3',
+            year: currentYear,
+            title: 'Chuyến du lịch nghỉ dưỡng cùng gia đình',
+            category: 'travel',
+            deadline: `${currentYear}-08-15`,
+            progress: 100,
+            note: 'Đã hoàn thành chuyến đi trọn vẹn và nhiều kỷ niệm đẹp!'
+          }
+        ],
+        health: {
+          stepGoal: 8000,
+          stepsByDate: stepsHistory,
+          cycle: {
+            lastStartDate: formatDateStr(samplePeriodStart),
+            cycleLength: 28,
+            periodLength: 5,
+            symptomsByDate: {
+              [todayStr]: [0, 7]
+            }
+          }
+        },
+        seasonPrefs: {
+          auto: true,
+          manualSeason: 'spring'
+        }
+      };
+    }
+
+    let appState = loadState();
+    let currentView = 'weekly';
+    let activeWeekMonday = getMondayOfDate(new Date());
+    let activeYear = new Date().getFullYear();
+    let activeGoalYear = new Date().getFullYear();
+    let selectedNewStickerColors = { bg: '#fce7f3', color: '#be185d' };
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return createInitialState();
+        const parsed = JSON.parse(raw);
+        const init = createInitialState();
+        return {
+          ...init,
+          ...parsed,
+          goals: parsed.goals || init.goals,
+          lang: parsed.lang || 'vi'
+        };
+      } catch (e) {
+        return createInitialState();
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {
+        console.error('Error saving data:', e);
+      }
+    }
+
+    function showToast(msg, icon = '🍀') {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      document.getElementById('toast-icon').textContent = icon;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2400);
+    }
+
+    function setLanguage(lang) {
+      appState.lang = lang;
+      saveState();
+      applyTranslations();
+      updateHeaderSummary();
+      if (currentView === 'weekly') renderWeeklyView();
+      if (currentView === 'yearly') renderYearlyView();
+      if (currentView === 'goals') renderGoalsView();
+      if (currentView === 'health') renderHealthView();
+      showToast(t().toastLangChanged, lang === 'vi' ? '🇻🇳' : '🇩🇪');
+    }
+
+    function applyTranslations() {
+      const tr = t();
+      const isDe = (appState.lang || 'vi') === 'de';
+
+      const btnVi = document.getElementById('lang-btn-vi');
+      const btnDe = document.getElementById('lang-btn-de');
+      btnVi.style.backgroundColor = !isDe ? 'var(--accent-color)' : 'transparent';
+      btnVi.style.color = !isDe ? '#ffffff' : '#334155';
+      btnDe.style.backgroundColor = isDe ? 'var(--accent-color)' : 'transparent';
+      btnDe.style.color = isDe ? '#ffffff' : '#334155';
+
+      document.getElementById('tab-label-weekly').textContent = tr.tabWeekly;
+      document.getElementById('tab-label-yearly').textContent = tr.tabYearly;
+      document.getElementById('tab-label-goals').textContent = tr.tabGoals;
+      document.getElementById('tab-label-health').textContent = tr.tabHealth;
+
+      document.getElementById('season-btn-spring').textContent = tr.seasonSpring;
+      document.getElementById('season-btn-summer').textContent = tr.seasonSummer;
+      document.getElementById('season-btn-autumn').textContent = tr.seasonAutumn;
+      document.getElementById('season-btn-winter').textContent = tr.seasonWinter;
+      document.getElementById('auto-season-btn').textContent = tr.seasonAuto;
+
+      document.getElementById('btn-today-week').textContent = tr.btnToday;
+      document.getElementById('sticker-palette-label').textContent = tr.stickerPaletteLabel;
+      document.getElementById('btn-create-sticker').innerHTML = `<span>${tr.btnCreateSticker}</span>`;
+
+      document.getElementById('btn-this-year').textContent = tr.btnThisYear;
+      document.getElementById('legend-veg-text').textContent = tr.legendVeg;
+      document.getElementById('legend-appt-text').textContent = tr.legendAppt;
+      document.getElementById('btn-add-appt-yearly').textContent = tr.btnAddApptYearly;
+
+      document.getElementById('goals-subtitle').textContent = tr.goalsSubtitle;
+      document.getElementById('btn-open-goal-modal').innerHTML = `<span>${tr.btnNewGoal}</span>`;
+      document.getElementById('goal-stat-total-label').textContent = tr.goalStatTotal;
+      document.getElementById('goal-stat-done-label').textContent = tr.goalStatDone;
+      document.getElementById('goal-stat-avg-label').textContent = tr.goalStatAvg;
+
+      document.getElementById('health-step-badge').textContent = tr.healthStepBadge;
+      document.getElementById('health-step-title').textContent = tr.healthStepTitle;
+      document.getElementById('health-step-goal-prefix').textContent = tr.healthStepGoalPrefix;
+      document.getElementById('health-quick-add-label').textContent = tr.healthQuickAddLabel;
+      document.getElementById('custom-step-input').placeholder = tr.customStepPlaceholder;
+      document.getElementById('btn-update-steps').textContent = tr.btnUpdate;
+      document.getElementById('health-7day-title').textContent = tr.health7DayTitle;
+
+      document.getElementById('health-cycle-badge').textContent = tr.healthCycleBadge;
+      document.getElementById('health-cycle-title').textContent = tr.healthCycleTitle;
+      document.getElementById('btn-cycle-settings').textContent = tr.btnCycleSettings;
+      document.getElementById('cycle-status-label').textContent = tr.cycleStatusLabel;
+      document.getElementById('cycle-next-label').textContent = tr.cycleNextLabel;
+      document.getElementById('cycle-ovul-label').textContent = tr.cycleOvulLabel;
+      document.getElementById('cycle-last-start-label').textContent = tr.cycleLastStartLabel;
+      document.getElementById('btn-save-period-start').textContent = tr.btnSavePeriodStart;
+      document.getElementById('cycle-symptoms-label').textContent = tr.cycleSymptomsLabel;
+      document.getElementById('cycle-forecast-label').textContent = tr.cycleForecastLabel;
+      document.getElementById('cycle-legend-period').textContent = tr.cycleLegendPeriod;
+      document.getElementById('cycle-legend-ovul').textContent = tr.cycleLegendOvul;
+
+      document.getElementById('modal-appt-title').textContent = tr.modalApptTitle;
+      document.getElementById('modal-appt-add-heading').textContent = tr.modalApptAddHeading;
+      document.getElementById('appt-title-input').placeholder = tr.apptTitlePlaceholder;
+      document.getElementById('appt-note-input').placeholder = tr.apptNotePlaceholder;
+      document.getElementById('btn-save-appt').textContent = tr.btnSaveAppt;
+
+      document.getElementById('modal-sticker-title').textContent = tr.modalStickerTitle;
+      document.getElementById('modal-sticker-desc').textContent = tr.modalStickerDesc;
+      document.getElementById('new-sticker-name').placeholder = tr.stickerNamePlaceholder;
+      document.getElementById('modal-sticker-color-label').textContent = tr.stickerColorLabel;
+      document.getElementById('btn-add-sticker').textContent = tr.btnAddSticker;
+      document.getElementById('modal-sticker-existing-label').textContent = tr.stickerExistingLabel;
+
+      document.getElementById('goal-label-title').textContent = tr.goalLabelTitle;
+      document.getElementById('goal-input-title').placeholder = tr.goalPlaceholderTitle;
+      document.getElementById('goal-label-category').textContent = tr.goalLabelCategory;
+      document.getElementById('goal-label-deadline').textContent = tr.goalLabelDeadline;
+      document.getElementById('goal-label-progress').textContent = tr.goalLabelProgress;
+      document.getElementById('goal-label-note').textContent = tr.goalLabelNote;
+      document.getElementById('goal-input-note').placeholder = tr.goalPlaceholderNote;
+      document.getElementById('btn-save-goal').textContent = tr.btnSaveGoal;
+
+      const catSelect = document.getElementById('goal-input-category');
+      Object.keys(tr.goalCategories).forEach(key => {
+        const opt = catSelect.querySelector(`option[value="${key}"]`);
+        if (opt) opt.textContent = tr.goalCategories[key].label;
+      });
+    }
+
+    /* ==========================================================================
+       2. VIETNAMESE LUNAR CALENDAR CONVERSION ENGINE (Hồ Ngọc Đức Algorithm)
+       ========================================================================== */
+    const PI = Math.PI;
+    function INT(d) {
+      return Math.floor(d);
+    }
+
+    function jdFromDate(dd, mm, yy) {
+      let a = INT((14 - mm) / 12);
+      let y = yy + 4800 - a;
+      let m = mm + 12 * a - 3;
+      let jd = dd + INT((153 * m + 2) / 5) + 365 * y + INT(y / 4) - INT(y / 100) + INT(y / 400) - 32045;
+      if (jd < 2299161) {
+        jd = dd + INT((153 * m + 2) / 5) + 365 * y + INT(y / 4) - 32083;
+      }
+      return jd;
+    }
+
+    function NewMoon(k) {
+      let T = k / 1236.85;
+      let T2 = T * T;
+      let T3 = T2 * T;
+      let dr = PI / 180;
+      let Jd1 = 2415020.75933 + 29.53058868 * k + 0.0001178 * T2 - 0.000000155 * T3;
+      Jd1 = Jd1 + 0.00033 * Math.sin((166.56 + 132.87 * T - 0.009173 * T2) * dr);
+      let M = 359.2242 + 29.10535608 * k - 0.0000333 * T2 - 0.00000347 * T3;
+      let Mpr = 306.0253 + 385.81691806 * k + 0.0107306 * T2 + 0.00001236 * T3;
+      let F = 21.2964 + 390.67050646 * k - 0.0016528 * T2 - 0.00000239 * T3;
+      let C1 = (0.1734 - 0.000393 * T) * Math.sin(M * dr) + 0.0021 * Math.sin(2 * dr * M);
+      C1 = C1 - 0.4068 * Math.sin(Mpr * dr) + 0.0161 * Math.sin(dr * 2 * Mpr);
+      C1 = C1 - 0.0004 * Math.sin(dr * 3 * Mpr);
+      C1 = C1 + 0.0104 * Math.sin(dr * 2 * F) - 0.0051 * Math.sin(dr * (M + Mpr));
+      C1 = C1 - 0.0074 * Math.sin(dr * (M - Mpr)) + 0.0004 * Math.sin(dr * (2 * F + M));
+      C1 = C1 - 0.0004 * Math.sin(dr * (2 * F - M)) - 0.0006 * Math.sin(dr * (2 * F + Mpr));
+      C1 = C1 + 0.0010 * Math.sin(dr * (2 * F - Mpr)) + 0.0005 * Math.sin(dr * (2 * Mpr + M));
+      let deltat;
+      if (T < -11) {
+        deltat = 0.001 + 0.000839 * T + 0.0002261 * T2 - 0.00000845 * T3 - 0.000000081 * T * T3;
+      } else {
+        deltat = -0.000278 + 0.000265 * T + 0.000262 * T2;
+      }
+      return Jd1 + C1 - deltat;
+    }
+
+    function SunLongitude(jdn) {
+      let T = (jdn - 2451545.0) / 36525;
+      let T2 = T * T;
+      let dr = PI / 180;
+      let M = 357.52910 + 35999.05030 * T - 0.0001559 * T2 - 0.00000048 * T * T2;
+      let L0 = 280.46645 + 36000.76983 * T + 0.0003032 * T2;
+      let DL = (1.914600 - 0.004817 * T - 0.000014 * T2) * Math.sin(dr * M);
+      DL = DL + (0.019993 - 0.000101 * T) * Math.sin(dr * 2 * M) + 0.000290 * Math.sin(dr * 3 * M);
+      let L = L0 + DL;
+      L = L * dr;
+      L = L - PI * 2 * (INT(L / (PI * 2)));
+      return L;
+    }
+
+    function getSunLongitude(dayNumber, timeZone) {
+      return INT(SunLongitude(dayNumber - 0.5 - timeZone / 24) / PI * 6);
+    }
+
+    function getNewMoonDay(k, timeZone) {
+      return INT(NewMoon(k) + 0.5 + timeZone / 24);
+    }
+
+    function getLunarMonth11(yy, timeZone) {
+      let off = jdFromDate(31, 12, yy) - 2415021;
+      let k = INT(off / 29.530588853);
+      let nm = getNewMoonDay(k, timeZone);
+      let sunLong = getSunLongitude(nm, timeZone);
+      if (sunLong >= 9) {
+        nm = getNewMoonDay(k - 1, timeZone);
+      }
+      return nm;
+    }
+
+    function getLeapMonthOffset(a11, timeZone) {
+      let k = INT((a11 - 2415021.076998695) / 29.530588853 + 0.5);
+      let last = 0;
+      let i = 1;
+      let arc = getSunLongitude(getNewMoonDay(k + i, timeZone), timeZone);
+      do {
+        last = arc;
+        i++;
+        arc = getSunLongitude(getNewMoonDay(k + i, timeZone), timeZone);
+      } while (arc !== last && i < 14);
+      return i - 1;
+    }
+
+    function convertSolar2Lunar(dd, mm, yy, timeZone = 7) {
+      let dayNumber = jdFromDate(dd, mm, yy);
+      let k = INT((dayNumber - 2415021.076998695) / 29.530588853);
+      let monthStart = getNewMoonDay(k + 1, timeZone);
+      if (monthStart > dayNumber) {
+        monthStart = getNewMoonDay(k, timeZone);
+      }
+      let a11 = getLunarMonth11(yy, timeZone);
+      let b11 = a11;
+      let lunarYear;
+      if (a11 >= monthStart) {
+        lunarYear = yy;
+        a11 = getLunarMonth11(yy - 1, timeZone);
+      } else {
+        lunarYear = yy + 1;
+        b11 = getLunarMonth11(yy + 1, timeZone);
+      }
+      let lunarDay = dayNumber - monthStart + 1;
+      let diff = INT((monthStart - a11) / 29);
+      let lunarLeap = 0;
+      let lunarMonth = diff + 11;
+      if (b11 - a11 > 365) {
+        let leapMonthDiff = getLeapMonthOffset(a11, timeZone);
+        if (diff >= leapMonthDiff) {
+          lunarMonth = diff + 10;
+          if (diff === leapMonthDiff) {
+            lunarLeap = 1;
+          }
+        }
+      }
+      if (lunarMonth > 12) {
+        lunarMonth = lunarMonth - 12;
+      }
+      if (lunarMonth >= 11 && diff < 4) {
+        lunarYear -= 1;
+      }
+      return { day: lunarDay, month: lunarMonth, year: lunarYear, leap: lunarLeap };
+    }
+
+    function isVegetarianLunarDay(lunarDay) {
+      return lunarDay === 1 || lunarDay === 15 || lunarDay === 30;
+    }
+
+    /* ==========================================================================
+       3. SEASONAL THEME & PARTICLE ANIMATION ENGINE (SPRING, SUMMER, AUTUMN, WINTER)
+       ========================================================================== */
+    let currentSeason = 'spring';
+    const canvas = document.getElementById('season-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeSeasonCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeSeasonCanvas);
+    resizeSeasonCanvas();
+
+    function detectCurrentSeasonByDate() {
+      const m = new Date().getMonth() + 1;
+      if (m >= 2 && m <= 4) return 'spring';
+      if (m >= 5 && m <= 7) return 'summer';
+      if (m >= 8 && m <= 10) return 'autumn';
+      return 'winter';
+    }
+
+    function setSeason(season, isManual = false) {
+      currentSeason = season;
+      if (isManual) {
+        appState.seasonPrefs.auto = false;
+        appState.seasonPrefs.manualSeason = season;
+        saveState();
+      }
+      document.body.className = `season-${season}`;
+
+      const icons = { spring: '🌸', summer: '☀️', autumn: '🍂', winter: '❄️' };
+      document.getElementById('brand-icon-box').textContent = icons[season] || '🍀';
+
+      document.querySelectorAll('.season-btn').forEach(btn => {
+        if (btn.dataset.season === season) {
+          btn.style.backgroundColor = 'var(--accent-color)';
+          btn.style.color = '#ffffff';
+        } else {
+          btn.style.backgroundColor = 'transparent';
+          btn.style.color = '#334155';
+        }
+      });
+
+      const autoBtn = document.getElementById('auto-season-btn');
+      if (appState.seasonPrefs.auto) {
+        autoBtn.classList.add('bg-white', 'text-slate-800', 'font-bold', 'shadow-sm');
+      } else {
+        autoBtn.classList.remove('bg-white', 'text-slate-800', 'font-bold', 'shadow-sm');
+      }
+
+      initParticles();
+    }
+
+    function enableAutoSeason() {
+      appState.seasonPrefs.auto = true;
+      saveState();
+      setSeason(detectCurrentSeasonByDate(), false);
+      showToast(t().toastAutoSeason, '🍀');
+    }
+
+    function initParticles() {
+      particles = [];
+      const count = currentSeason === 'winter' ? 75 : currentSeason === 'summer' ? 28 : 42;
+      for (let i = 0; i < count; i++) {
+        particles.push(createParticle(true));
+      }
+    }
+
+    function createParticle(randomY = false) {
+      const w = canvas.width;
+      const h = canvas.height;
+      if (currentSeason === 'spring') {
+        return {
+          x: Math.random() * w,
+          y: randomY ? Math.random() * h : -20,
+          size: 7 + Math.random() * 8,
+          speedY: 0.9 + Math.random() * 1.4,
+          speedX: -0.6 + Math.random() * 1.2,
+          angle: Math.random() * Math.PI * 2,
+          spin: (Math.random() - 0.5) * 0.04,
+          sway: Math.random() * 2,
+          color: ['#fbcfe8', '#f9a8d4', '#f472b6', '#ffe4e6'][Math.floor(Math.random() * 4)]
+        };
+      } else if (currentSeason === 'autumn') {
+        return {
+          x: Math.random() * w,
+          y: randomY ? Math.random() * h : -25,
+          size: 9 + Math.random() * 10,
+          speedY: 1.1 + Math.random() * 1.6,
+          speedX: -0.9 + Math.random() * 1.8,
+          angle: Math.random() * Math.PI * 2,
+          spin: (Math.random() - 0.5) * 0.05,
+          sway: Math.random() * 3,
+          color: ['#f59e0b', '#d97706', '#ea580c', '#eab308', '#b45309'][Math.floor(Math.random() * 5)]
+        };
+      } else if (currentSeason === 'winter') {
+        return {
+          x: Math.random() * w,
+          y: randomY ? Math.random() * h : -15,
+          size: 2.5 + Math.random() * 4.5,
+          speedY: 0.7 + Math.random() * 1.5,
+          speedX: -0.4 + Math.random() * 0.8,
+          alpha: 0.45 + Math.random() * 0.55
+        };
+      } else {
+        return {
+          x: Math.random() * w,
+          y: randomY ? Math.random() * h : Math.random() * h,
+          size: 2 + Math.random() * 3.5,
+          speedY: -0.2 - Math.random() * 0.4,
+          speedX: -0.3 + Math.random() * 0.6,
+          pulse: Math.random() * Math.PI * 2
+        };
+      }
+    }
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+
+        if (currentSeason === 'spring') {
+          p.y += p.speedY;
+          p.x += p.speedX + Math.sin(p.y * 0.015 + p.sway) * 0.6;
+          p.angle += p.spin;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.angle);
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(-p.size / 2, -p.size / 2, -p.size, p.size / 3, 0, p.size);
+          ctx.bezierCurveTo(p.size, p.size / 3, p.size / 2, -p.size / 2, 0, 0);
+          ctx.fill();
+          ctx.restore();
+
+          if (p.y > canvas.height + 20) particles[i] = createParticle(false);
+
+        } else if (currentSeason === 'autumn') {
+          p.y += p.speedY;
+          p.x += p.speedX + Math.cos(p.y * 0.012 + p.sway) * 0.9;
+          p.angle += p.spin;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.angle);
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, p.size * 0.75, p.size * 0.42, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(120, 53, 15, 0.35)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(-p.size * 0.7, 0);
+          ctx.lineTo(p.size * 0.7, 0);
+          ctx.stroke();
+          ctx.restore();
+
+          if (p.y > canvas.height + 25) particles[i] = createParticle(false);
+
+        } else if (currentSeason === 'winter') {
+          p.y += p.speedY;
+          p.x += p.speedX + Math.sin(p.y * 0.02) * 0.35;
+
+          ctx.save();
+          ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
+          ctx.shadowColor = 'rgba(186, 230, 253, 0.8)';
+          ctx.shadowBlur = 6;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+
+          if (p.y > canvas.height + 15) particles[i] = createParticle(false);
+
+        } else {
+          p.y += p.speedY;
+          p.x += p.speedX;
+          p.pulse += 0.04;
+          const alpha = 0.25 + (Math.sin(p.pulse) + 1) * 0.3;
+
+          ctx.save();
+          ctx.fillStyle = `rgba(254, 240, 138, ${alpha})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+
+          if (p.y < -15 || p.x < -15 || p.x > canvas.width + 15) {
+            particles[i] = createParticle(true);
+          }
+        }
+      }
+
+      requestAnimationFrame(drawParticles);
+    }
+
+    /* ==========================================================================
+       4. NAVIGATION & HEADER SUMMARY
+       ========================================================================== */
+    function switchView(viewName) {
+      currentView = viewName;
+      ['weekly', 'yearly', 'goals', 'health'].forEach(v => {
+        document.getElementById(`view-${v}`).classList.toggle('hidden', v !== viewName);
+        const btn = document.getElementById(`tab-${v}`);
+        if (v === viewName) {
+          btn.classList.add('active');
+          btn.classList.remove('text-slate-700');
+        } else {
+          btn.classList.remove('active');
+          btn.classList.add('text-slate-700');
+        }
+      });
+
+      if (viewName === 'weekly') renderWeeklyView();
+      if (viewName === 'yearly') renderYearlyView();
+      if (viewName === 'goals') renderGoalsView();
+      if (viewName === 'health') renderHealthView();
+    }
+
+    function updateHeaderSummary() {
+      const tr = t();
+      const now = new Date();
+      const lunar = convertSolar2Lunar(now.getDate(), now.getMonth() + 1, now.getFullYear());
+      const vegNote = isVegetarianLunarDay(lunar.day) ? tr.todayVegBadge : '';
+      document.getElementById('today-summary-text').textContent =
+        `${tr.daysFull[now.getDay()]}, ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} • ${tr.lunarLabel}: ${lunar.day}/${lunar.month}${lunar.leap ? tr.leapMonth : ''}${vegNote}`;
+    }
+
+    /* ==========================================================================
+       5. WEEKLY CALENDAR (MON -> SUN), LUNAR LOTUS & STICKER TO-DO
+       ========================================================================== */
+    function changeWeek(deltaWeeks) {
+      activeWeekMonday.setDate(activeWeekMonday.getDate() + deltaWeeks * 7);
+      renderWeeklyView();
+    }
+
+    function goToCurrentWeek() {
+      activeWeekMonday = getMondayOfDate(new Date());
+      renderWeeklyView();
+    }
+
+    function renderStickerPalettePreview() {
+      const container = document.getElementById('sticker-palette-preview');
+      container.innerHTML = appState.stickers.map(st => `
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm border border-white"
+              style="background-color: ${st.bg}; color: ${st.color};">
+          <span>${st.emoji}</span>
+          <span>${getStickerDisplayName(st)}</span>
+        </span>
+      `).join('');
+    }
+
+    function renderWeeklyView() {
+      renderStickerPalettePreview();
+      const tr = t();
+      const grid = document.getElementById('weekly-grid');
+      const todayStr = getTodayStr();
+      const dayNames = tr.daysShort;
+
+      const endSunday = new Date(activeWeekMonday);
+      endSunday.setDate(activeWeekMonday.getDate() + 6);
+      document.getElementById('week-range-title').textContent =
+        `${tr.weekPrefix} ${activeWeekMonday.getDate()}/${activeWeekMonday.getMonth() + 1} – ${endSunday.getDate()}/${endSunday.getMonth() + 1}/${endSunday.getFullYear()}`;
+
+      let vegDaysInWeek = [];
+      let cardsHtml = '';
+
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(activeWeekMonday);
+        d.setDate(activeWeekMonday.getDate() + i);
+        const dateStr = formatDateStr(d);
+        const isToday = dateStr === todayStr;
+
+        const lunar = convertSolar2Lunar(d.getDate(), d.getMonth() + 1, d.getFullYear());
+        const isVeg = isVegetarianLunarDay(lunar.day);
+        if (isVeg) {
+          vegDaysInWeek.push(`${dayNames[i]} (${lunar.day}/${lunar.month} ÂL)`);
+        }
+
+        const dayTodos = appState.todos[dateStr] || [];
+        const dayAppointments = appState.appointments.filter(a => a.date === dateStr);
+
+        const stickerOptions = appState.stickers.map(s =>
+          `<option value="${s.id}">${s.emoji} ${getStickerDisplayName(s)}</option>`
+        ).join('');
+
+        cardsHtml += `
+          <div class="glass-card glass-card-hover rounded-3xl p-3.5 flex flex-col justify-between min-h-[340px] ${isToday ? 'ring-2 ring-rose-400 bg-white/90' : ''}">
+            <div>
+              <!-- Day Header -->
+              <div class="flex items-start justify-between pb-2.5 mb-2.5 border-b border-slate-200/70">
+                <div>
+                  <span class="text-xs font-bold uppercase tracking-wider ${isToday ? 'text-rose-600' : 'text-slate-500'}">
+                    ${dayNames[i]}
+                  </span>
+                  <div class="flex items-baseline gap-1.5 mt-0.5">
+                    <span class="text-xl font-bold text-slate-800">${d.getDate()}/${d.getMonth() + 1}</span>
+                    <span class="text-[11px] font-semibold px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-600">
+                      ${lunar.day}/${lunar.month} ÂL
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Automatic Lotus Icon on Lunar 1, 15, 30 -->
+                ${isVeg ? `
+                  <div class="lotus-badge flex flex-col items-center bg-pink-50 border border-pink-200 px-2 py-1 rounded-2xl" title="${tr.vegTooltip}">
+                    <span class="text-lg leading-none">🪷</span>
+                    <span class="text-[9px] font-bold text-pink-700 mt-0.5">${tr.vegTag}</span>
+                  </div>
+                ` : `
+                  <button onclick="openAppointmentModal('${dateStr}')" class="text-[11px] font-semibold text-slate-400 hover:text-slate-700 px-2 py-1 rounded-xl hover:bg-white/80 transition">
+                    ${tr.btnAddApptShort}
+                  </button>
+                `}
+              </div>
+
+              <!-- Appointments Badges -->
+              ${dayAppointments.length > 0 ? `
+                <div class="mb-2.5 space-y-1">
+                  ${dayAppointments.map(ap => `
+                    <div onclick="openAppointmentModal('${dateStr}')" class="cursor-pointer px-2.5 py-1.5 rounded-xl text-[11px] font-semibold text-white shadow-sm flex items-center justify-between gap-1"
+                         style="background-color: ${ap.color}">
+                      <span class="truncate">⏰ ${ap.time} ${ap.title}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+
+              <!-- To-Do List -->
+              <div class="space-y-1.5 max-h-52 overflow-y-auto pr-0.5">
+                ${dayTodos.length === 0 ? `
+                  <p class="text-[11px] text-slate-400 italic py-4 text-center">${tr.noTodosYet}</p>
+                ` : dayTodos.map(todo => {
+                  const st = appState.stickers.find(s => s.id === todo.stickerId);
+                  return `
+                    <div class="group flex items-start justify-between gap-1.5 p-2 rounded-2xl bg-white/80 border border-white shadow-sm">
+                      <div class="flex items-start gap-2 flex-1 min-w-0">
+                        <input type="checkbox" ${todo.done ? 'checked' : ''} onchange="toggleTodo('${dateStr}', '${todo.id}')"
+                          class="mt-0.5 w-4 h-4 rounded accent-rose-500 cursor-pointer flex-shrink-0" />
+                        <div class="flex-1 min-w-0">
+                          <p class="text-xs font-medium break-words ${todo.done ? 'line-through text-slate-400' : 'text-slate-700'}">
+                            ${escapeHtml(todo.text)}
+                          </p>
+                          ${st ? `
+                            <span class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
+                                  style="background-color: ${st.bg}; color: ${st.color};">
+                              ${st.emoji} ${escapeHtml(getStickerDisplayName(st))}
+                            </span>
+                          ` : ''}
+                        </div>
+                      </div>
+                      <button onclick="deleteTodo('${dateStr}', '${todo.id}')" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-rose-500 text-xs px-1 transition">
+                        ✕
+                      </button>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <!-- Add To-Do Form with Sticker Selector -->
+            <div class="mt-3 pt-2.5 border-t border-slate-200/70 space-y-1.5">
+              <input type="text" id="todo-input-${dateStr}" placeholder="${tr.addTodoPlaceholder}"
+                onkeydown="if(event.key==='Enter') addTodo('${dateStr}')"
+                class="w-full px-2.5 py-1.5 rounded-xl bg-white/90 border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-rose-300" />
+              <div class="flex items-center gap-1">
+                <select id="todo-sticker-${dateStr}" class="flex-1 px-2 py-1 rounded-xl bg-white/90 border border-slate-200 text-[11px] font-medium text-slate-700 focus:outline-none">
+                  <option value="">${tr.noStickerOption}</option>
+                  ${stickerOptions}
+                </select>
+                <button onclick="addTodo('${dateStr}')" class="px-2.5 py-1 rounded-xl text-white text-[11px] font-bold shadow-sm hover:opacity-90"
+                  style="background-color: var(--accent-color)">
+                  ${tr.btnAdd}
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      grid.innerHTML = cardsHtml;
+      document.getElementById('week-lunar-summary').textContent =
+        vegDaysInWeek.length > 0
+          ? `${tr.vegWeekSummary} ${vegDaysInWeek.join(', ')}`
+          : tr.noVegWeekSummary;
+    }
+
+    function addTodo(dateStr) {
+      const input = document.getElementById(`todo-input-${dateStr}`);
+      const stickerSelect = document.getElementById(`todo-sticker-${dateStr}`);
+      const text = input.value.trim();
+      if (!text) return;
+
+      if (!appState.todos[dateStr]) appState.todos[dateStr] = [];
+      appState.todos[dateStr].push({
+        id: 'td_' + Date.now(),
+        text,
+        done: false,
+        stickerId: stickerSelect.value || null
+      });
+      saveState();
+      renderWeeklyView();
+      showToast(t().toastTodoAdded, '🍀');
+    }
+
+    function toggleTodo(dateStr, todoId) {
+      const list = appState.todos[dateStr] || [];
+      const item = list.find(t => t.id === todoId);
+      if (item) {
+        item.done = !item.done;
+        saveState();
+        renderWeeklyView();
+      }
+    }
+
+    function deleteTodo(dateStr, todoId) {
+      if (!appState.todos[dateStr]) return;
+      appState.todos[dateStr] = appState.todos[dateStr].filter(t => t.id !== todoId);
+      saveState();
+      renderWeeklyView();
+    }
+
+    /* ==========================================================================
+       6. CUSTOM STICKER CREATOR MODAL
+       ========================================================================== */
+    function openStickerModal() {
+      renderModalStickerList();
+      const modal = document.getElementById('sticker-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function selectStickerColor(bg, color) {
+      selectedNewStickerColors = { bg, color };
+      showToast('Đã chọn màu nhãn dán', '🎨');
+    }
+
+    function addCustomSticker() {
+      const emoji = document.getElementById('new-sticker-emoji').value.trim() || '🍀';
+      const name = document.getElementById('new-sticker-name').value.trim();
+      if (!name) {
+        showToast(t().toastEnterTitle, '⚠️');
+        return;
+      }
+
+      appState.stickers.push({
+        id: 'st_' + Date.now(),
+        emoji,
+        name,
+        bg: selectedNewStickerColors.bg,
+        color: selectedNewStickerColors.color
+      });
+      saveState();
+      document.getElementById('new-sticker-name').value = '';
+      renderModalStickerList();
+      renderWeeklyView();
+      showToast(`Đã tạo nhãn "${emoji} ${name}"!`, emoji);
+    }
+
+    function deleteSticker(stickerId) {
+      appState.stickers = appState.stickers.filter(s => s.id !== stickerId);
+      saveState();
+      renderModalStickerList();
+      renderWeeklyView();
+    }
+
+    function renderModalStickerList() {
+      const list = document.getElementById('modal-sticker-list');
+      list.innerHTML = appState.stickers.map(st => `
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold shadow-sm"
+              style="background-color: ${st.bg}; color: ${st.color};">
+          <span>${st.emoji} ${escapeHtml(getStickerDisplayName(st))}</span>
+          <button onclick="deleteSticker('${st.id}')" class="hover:opacity-70 ml-1">✕</button>
+        </span>
+      `).join('');
+    }
+
+    /* ==========================================================================
+       7. FULL YEAR CALENDAR & APPOINTMENTS MODAL
+       ========================================================================== */
+    function changeYear(delta) {
+      activeYear += delta;
+      renderYearlyView();
+    }
+
+    function jumpToCurrentYear() {
+      activeYear = new Date().getFullYear();
+      renderYearlyView();
+    }
+
+    function renderYearlyView() {
+      const tr = t();
+      document.getElementById('yearly-title').textContent = `${tr.yearPrefix} ${activeYear}`;
+      const grid = document.getElementById('yearly-months-grid');
+      const todayStr = getTodayStr();
+      const monthNames = tr.months;
+
+      let html = '';
+      for (let m = 0; m < 12; m++) {
+        const firstDay = new Date(activeYear, m, 1);
+        const daysInMonth = new Date(activeYear, m + 1, 0).getDate();
+        let startOffset = firstDay.getDay() - 1;
+        if (startOffset < 0) startOffset = 6;
+
+        let cellsHtml = '';
+        for (let b = 0; b < startOffset; b++) {
+          cellsHtml += `<div class="h-10"></div>`;
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+          const dObj = new Date(activeYear, m, day);
+          const dateStr = formatDateStr(dObj);
+          const isToday = dateStr === todayStr;
+          const lunar = convertSolar2Lunar(day, m + 1, activeYear);
+          const isVeg = isVegetarianLunarDay(lunar.day);
+          const dayAppts = appState.appointments.filter(a => a.date === dateStr);
+
+          cellsHtml += `
+            <button onclick="openAppointmentModal('${dateStr}')"
+              class="relative h-11 rounded-xl flex flex-col items-center justify-center transition hover:bg-white hover:shadow-sm ${isToday ? 'bg-rose-500 text-white font-bold shadow' : 'bg-white/45 text-slate-700'}">
+              <span class="text-xs leading-none">${day}</span>
+              <span class="text-[9px] leading-none mt-0.5 ${isToday ? 'text-rose-100' : 'text-slate-400'}">
+                ${isVeg ? '🪷' : `${lunar.day}/${lunar.month}`}
+              </span>
+              ${dayAppts.length > 0 ? `
+                <span class="absolute top-1 right-1 w-2 h-2 rounded-full ${isToday ? 'bg-yellow-300' : 'bg-rose-500'}"></span>
+              ` : ''}
+            </button>
+          `;
+        }
+
+        html += `
+          <div class="glass-card rounded-3xl p-4">
+            <div class="flex items-center justify-between mb-2.5">
+              <h3 class="font-bold text-base text-slate-800">${monthNames[m]}</h3>
+              <span class="text-xs font-semibold text-slate-400">${activeYear}</span>
+            </div>
+            <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-slate-400 mb-1.5">
+              ${tr.daysMin.map((dm, idx) => `<div class="${idx === 6 ? 'text-rose-400' : ''}">${dm}</div>`).join('')}
+            </div>
+            <div class="grid grid-cols-7 gap-1">
+              ${cellsHtml}
+            </div>
+          </div>
+        `;
+      }
+
+      grid.innerHTML = html;
+    }
+
+    function openAppointmentModal(dateStr) {
+      const tr = t();
+      document.getElementById('appt-date-input').value = dateStr;
+      const dObj = parseDateStr(dateStr);
+      const lunar = convertSolar2Lunar(dObj.getDate(), dObj.getMonth() + 1, dObj.getFullYear());
+      const vegText = isVegetarianLunarDay(lunar.day) ? ` • 🪷 ${tr.vegTag}` : '';
+
+      document.getElementById('modal-date-subtitle').textContent =
+        `${dObj.getDate()}/${dObj.getMonth() + 1}/${dObj.getFullYear()} (${tr.lunarLabel} ${lunar.day}/${lunar.month}${vegText})`;
+
+      renderModalAppointmentsList(dateStr);
+      const modal = document.getElementById('appointment-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function renderModalAppointmentsList(dateStr) {
+      const tr = t();
+      const container = document.getElementById('modal-existing-appointments');
+      const list = appState.appointments.filter(a => a.date === dateStr);
+
+      if (list.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 italic text-center py-3">${tr.noApptsDay}</p>`;
+        return;
+      }
+
+      container.innerHTML = list.map(ap => `
+        <div class="p-3 rounded-2xl border border-slate-100 bg-slate-50 flex items-start justify-between gap-2">
+          <div class="flex items-start gap-2.5">
+            <span class="w-3 h-3 rounded-full mt-1 flex-shrink-0" style="background-color: ${ap.color}"></span>
+            <div>
+              <p class="text-xs font-bold text-slate-800">${ap.time} - ${escapeHtml(ap.title)}</p>
+              ${ap.note ? `<p class="text-[11px] text-slate-500 mt-0.5">📍 ${escapeHtml(ap.note)}</p>` : ''}
+            </div>
+          </div>
+          <button onclick="deleteAppointment('${ap.id}', '${dateStr}')" class="text-xs text-slate-400 hover:text-rose-600 font-bold px-1.5">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function saveAppointment() {
+      const dateStr = document.getElementById('appt-date-input').value;
+      const title = document.getElementById('appt-title-input').value.trim();
+      const time = document.getElementById('appt-time-input').value || '09:00';
+      const color = document.getElementById('appt-color-input').value;
+      const note = document.getElementById('appt-note-input').value.trim();
+
+      if (!title) {
+        showToast(t().toastEnterTitle, '⚠️');
+        return;
+      }
+
+      appState.appointments.push({
+        id: 'ap_' + Date.now(),
+        date: dateStr,
+        time,
+        title,
+        color,
+        note
+      });
+      saveState();
+
+      document.getElementById('appt-title-input').value = '';
+      document.getElementById('appt-note-input').value = '';
+      renderModalAppointmentsList(dateStr);
+      if (currentView === 'yearly') renderYearlyView();
+      if (currentView === 'weekly') renderWeeklyView();
+      showToast(t().toastApptSaved, '📅');
+    }
+
+    function deleteAppointment(apptId, dateStr) {
+      appState.appointments = appState.appointments.filter(a => a.id !== apptId);
+      saveState();
+      renderModalAppointmentsList(dateStr);
+      if (currentView === 'yearly') renderYearlyView();
+      if (currentView === 'weekly') renderWeeklyView();
+      showToast(t().toastApptDeleted, '🗑️');
+    }
+
+    /* ==========================================================================
+       7.5. YEARLY GOALS (MỤC TIÊU NĂM / JAHRESZIELE)
+       ========================================================================== */
+    function changeGoalYear(delta) {
+      activeGoalYear += delta;
+      renderGoalsView();
+    }
+
+    function renderGoalsView() {
+      const tr = t();
+      document.getElementById('goals-year-title').textContent = `${tr.goalsYearTitle} ${activeGoalYear}`;
+
+      const yearGoals = (appState.goals || []).filter(g => Number(g.year) === activeGoalYear);
+      const total = yearGoals.length;
+      const doneCount = yearGoals.filter(g => Number(g.progress) >= 100).length;
+      const avgProgress = total > 0
+        ? Math.round(yearGoals.reduce((acc, g) => acc + Number(g.progress || 0), 0) / total)
+        : 0;
+
+      document.getElementById('goal-stat-total').textContent = total;
+      document.getElementById('goal-stat-done').textContent = doneCount;
+      document.getElementById('goal-stat-avg').textContent = `${avgProgress}%`;
+      document.getElementById('goal-stat-avg-bar').style.width = `${avgProgress}%`;
+
+      const grid = document.getElementById('goals-grid');
+      if (yearGoals.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full glass-card rounded-3xl p-8 text-center space-y-3">
+            <div class="text-4xl">🌱</div>
+            <p class="text-sm font-medium text-slate-600">${tr.noGoalsYet}</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = yearGoals.map(goal => {
+        const catInfo = tr.goalCategories[goal.category] || tr.goalCategories.personal;
+        const pct = Math.min(100, Math.max(0, Number(goal.progress || 0)));
+        const isCompleted = pct >= 100;
+
+        return `
+          <div class="glass-card glass-card-hover rounded-3xl p-5 flex flex-col justify-between space-y-4 ${isCompleted ? 'ring-2 ring-emerald-400 bg-white/90' : ''}">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <span class="px-2.5 py-1 rounded-full text-[11px] font-bold" style="background-color: ${catInfo.bg}; color: ${catInfo.color};">
+                  ${catInfo.label}
+                </span>
+                ${isCompleted ? `
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700">
+                    ✅ ${tr.goalCompletedBadge}
+                  </span>
+                ` : (goal.deadline ? `
+                  <span class="text-[11px] font-semibold text-slate-500">
+                    ⏳ ${tr.goalDeadlinePrefix} ${goal.deadline.split('-').reverse().join('/')}
+                  </span>
+                ` : '')}
+              </div>
+
+              <h3 class="text-base font-bold text-slate-800 leading-snug ${isCompleted ? 'text-emerald-800' : ''}">
+                ${escapeHtml(goal.title)}
+              </h3>
+
+              ${goal.note ? `
+                <p class="text-xs text-slate-500 leading-relaxed bg-white/60 p-2.5 rounded-2xl border border-white">
+                  ${escapeHtml(goal.note)}
+                </p>
+              ` : ''}
+            </div>
+
+            <div class="space-y-3 pt-2 border-t border-slate-200/60">
+              <div>
+                <div class="flex items-center justify-between text-xs font-bold mb-1">
+                  <span class="text-slate-600">${pct}%</span>
+                  <div class="flex items-center gap-1">
+                    <button onclick="quickAdjustGoalProgress('${goal.id}', -10)" class="px-2 py-0.5 rounded-lg bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 text-[11px]">-10</button>
+                    <button onclick="quickAdjustGoalProgress('${goal.id}', 10)" class="px-2 py-0.5 rounded-lg bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 text-[11px]">+10</button>
+                  </div>
+                </div>
+                <div class="w-full h-2.5 bg-white/80 rounded-full overflow-hidden border border-white">
+                  <div class="h-full rounded-full transition-all duration-300" style="width: ${pct}%; background-color: ${isCompleted ? '#10b981' : 'var(--accent-color)'}"></div>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-end gap-2">
+                <button onclick="openGoalModal('${goal.id}')" class="px-3 py-1.5 rounded-xl bg-white/90 hover:bg-white text-slate-700 text-xs font-bold border border-slate-200 shadow-sm transition">
+                  ✏️ ${tr.btnEdit}
+                </button>
+                <button onclick="deleteGoal('${goal.id}')" class="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold transition">
+                  🗑️ ${tr.btnDelete}
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openGoalModal(goalId = null) {
+      const tr = t();
+      const editIdInput = document.getElementById('goal-edit-id');
+      const titleInput = document.getElementById('goal-input-title');
+      const catInput = document.getElementById('goal-input-category');
+      const deadlineInput = document.getElementById('goal-input-deadline');
+      const progressInput = document.getElementById('goal-input-progress');
+      const noteInput = document.getElementById('goal-input-note');
+
+      if (goalId) {
+        const goal = (appState.goals || []).find(g => g.id === goalId);
+        if (!goal) return;
+        document.getElementById('goal-modal-title').textContent = tr.goalModalEditTitle;
+        editIdInput.value = goal.id;
+        titleInput.value = goal.title;
+        catInput.value = goal.category || 'personal';
+        deadlineInput.value = goal.deadline || `${activeGoalYear}-12-31`;
+        progressInput.value = goal.progress || 0;
+        document.getElementById('goal-progress-preview').textContent = `${goal.progress || 0}%`;
+        noteInput.value = goal.note || '';
+      } else {
+        document.getElementById('goal-modal-title').textContent = tr.goalModalAddTitle;
+        editIdInput.value = '';
+        titleInput.value = '';
+        catInput.value = 'personal';
+        deadlineInput.value = `${activeGoalYear}-12-31`;
+        progressInput.value = 0;
+        document.getElementById('goal-progress-preview').textContent = '0%';
+        noteInput.value = '';
+      }
+
+      const modal = document.getElementById('goal-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function saveGoal() {
+      const editId = document.getElementById('goal-edit-id').value;
+      const title = document.getElementById('goal-input-title').value.trim();
+      const category = document.getElementById('goal-input-category').value;
+      const deadline = document.getElementById('goal-input-deadline').value;
+      const progress = Number(document.getElementById('goal-input-progress').value || 0);
+      const note = document.getElementById('goal-input-note').value.trim();
+
+      if (!title) {
+        showToast(t().toastEnterTitle, '⚠️');
+        return;
+      }
+
+      if (!appState.goals) appState.goals = [];
+
+      if (editId) {
+        const idx = appState.goals.findIndex(g => g.id === editId);
+        if (idx !== -1) {
+          appState.goals[idx] = {
+            ...appState.goals[idx],
+            title,
+            category,
+            deadline,
+            progress,
+            note
+          };
+        }
+      } else {
+        appState.goals.push({
+          id: 'gl_' + Date.now(),
+          year: activeGoalYear,
+          title,
+          category,
+          deadline,
+          progress,
+          note
+        });
+      }
+
+      saveState();
+      closeModal('goal-modal');
+      renderGoalsView();
+      showToast(t().toastGoalSaved, '🎯');
+    }
+
+    function quickAdjustGoalProgress(goalId, delta) {
+      const goal = (appState.goals || []).find(g => g.id === goalId);
+      if (!goal) return;
+      goal.progress = Math.min(100, Math.max(0, Number(goal.progress || 0) + delta));
+      saveState();
+      renderGoalsView();
+      if (goal.progress === 100) {
+        showToast('🎉 100%!', '🏆');
+      }
+    }
+
+    function deleteGoal(goalId) {
+      appState.goals = (appState.goals || []).filter(g => g.id !== goalId);
+      saveState();
+      renderGoalsView();
+      showToast(t().toastGoalDeleted, '🗑️');
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    /* ==========================================================================
+       8. HEALTH TRACKER (STEP COUNTER + MENSTRUAL CYCLE TRACKER)
+       ========================================================================== */
+    function renderHealthView() {
+      renderStepTracker();
+      renderCycleTracker();
+    }
+
+    function renderStepTracker() {
+      const tr = t();
+      const todayStr = getTodayStr();
+      const steps = appState.health.stepsByDate[todayStr] || 0;
+      const goal = appState.health.stepGoal || 8000;
+      const pct = Math.min(100, Math.round((steps / goal) * 100));
+
+      document.getElementById('step-goal-label').textContent = goal.toLocaleString('vi-VN');
+      document.getElementById('today-steps-display').textContent = steps.toLocaleString('vi-VN');
+      document.getElementById('step-percent-display').textContent = `${pct}${tr.stepPercentSuffix}`;
+
+      const circumference = 314.16;
+      const offset = circumference - (pct / 100) * circumference;
+      document.getElementById('step-progress-ring').style.strokeDashoffset = offset;
+
+      const kcal = Math.round(steps * 0.04);
+      const km = (steps * 0.00072).toFixed(1);
+      document.getElementById('step-calories-info').textContent = `${tr.estimatePrefix} ~${kcal} kcal • ~${km} km`;
+
+      const barsContainer = document.getElementById('step-history-bars');
+      const today = new Date();
+      let sum7 = 0;
+      let barsHtml = '';
+
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(today);
+        d.setDate(today.getDate() - i);
+        const dStr = formatDateStr(d);
+        const val = appState.health.stepsByDate[dStr] || 0;
+        sum7 += val;
+        const barHeightPct = Math.min(100, Math.max(8, Math.round((val / goal) * 100)));
+        const isToday = i === 0;
+
+        barsHtml += `
+          <div class="flex flex-col items-center justify-end h-full gap-1">
+            <span class="text-[10px] font-semibold text-slate-500">${val >= 1000 ? (val / 1000).toFixed(1) + 'k' : val}</span>
+            <div class="w-full max-w-[28px] rounded-t-xl transition-all duration-500 ${isToday ? 'bg-emerald-500' : 'bg-emerald-300/80'}"
+                 style="height: ${barHeightPct}%"></div>
+            <span class="text-[10px] font-bold ${isToday ? 'text-emerald-700' : 'text-slate-400'}">
+              ${d.getDate()}/${d.getMonth() + 1}
+            </span>
+          </div>
+        `;
+      }
+
+      barsContainer.innerHTML = barsHtml;
+      document.getElementById('weekly-avg-steps').textContent =
+        `${tr.avgPrefix} ${Math.round(sum7 / 7).toLocaleString('vi-VN')} ${tr.stepsPerDaySuffix}`;
+    }
+
+    function addSteps(amount) {
+      const todayStr = getTodayStr();
+      const current = appState.health.stepsByDate[todayStr] || 0;
+      appState.health.stepsByDate[todayStr] = current + amount;
+      saveState();
+      renderStepTracker();
+      showToast(`+${amount.toLocaleString('vi-VN')}!`, '👟');
+    }
+
+    function setExactSteps() {
+      const input = document.getElementById('custom-step-input');
+      const val = parseInt(input.value, 10);
+      if (isNaN(val) || val < 0) return;
+      appState.health.stepsByDate[getTodayStr()] = val;
+      saveState();
+      input.value = '';
+      renderStepTracker();
+      showToast('👟', '👟');
+    }
+
+    function openStepGoalModal() {
+      const tr = t();
+      document.getElementById('settings-modal-title').textContent = tr.stepGoalModalTitle;
+      document.getElementById('settings-modal-body').innerHTML = `
+        <p class="text-xs text-slate-500">${tr.stepGoalModalDesc}</p>
+        <input type="number" id="new-step-goal-input" value="${appState.health.stepGoal}" min="1000" max="50000" step="500"
+          class="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-sm font-bold" />
+        <button onclick="saveStepGoal()" class="w-full py-2.5 rounded-2xl bg-emerald-600 text-white text-sm font-bold">
+          ${tr.btnSaveGoalSteps}
+        </button>
+      `;
+      const modal = document.getElementById('settings-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function saveStepGoal() {
+      const val = parseInt(document.getElementById('new-step-goal-input').value, 10);
+      if (val >= 1000) {
+        appState.health.stepGoal = val;
+        saveState();
+        renderStepTracker();
+        closeModal('settings-modal');
+        showToast('🎯', '🎯');
+      }
+    }
+
+    function savePeriodStartDate() {
+      const val = document.getElementById('period-start-input').value;
+      if (!val) return;
+      appState.health.cycle.lastStartDate = val;
+      saveState();
+      renderCycleTracker();
+      showToast('🌷', '🌷');
+    }
+
+    function renderCycleTracker() {
+      const tr = t();
+      const cycle = appState.health.cycle;
+      document.getElementById('period-start-input').value = cycle.lastStartDate;
+
+      const lastStart = parseDateStr(cycle.lastStartDate);
+      const today = new Date();
+      const todayZero = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const diffDays = Math.floor((todayZero - lastStart) / (1000 * 60 * 60 * 24));
+      const cycleDay = (diffDays >= 0 ? (diffDays % cycle.cycleLength) + 1 : 1);
+
+      const cyclesPassed = diffDays >= 0 ? Math.floor(diffDays / cycle.cycleLength) + 1 : 0;
+      const nextPeriod = new Date(lastStart);
+      nextPeriod.setDate(lastStart.getDate() + cyclesPassed * cycle.cycleLength);
+
+      const ovulation = new Date(nextPeriod);
+      ovulation.setDate(nextPeriod.getDate() - 14);
+
+      document.getElementById('cycle-current-day-title').textContent = tr.cycleDayTitle(cycleDay);
+      document.getElementById('next-period-date').textContent =
+        `${String(nextPeriod.getDate()).padStart(2, '0')}/${String(nextPeriod.getMonth() + 1).padStart(2, '0')}/${nextPeriod.getFullYear()}`;
+      document.getElementById('ovulation-date').textContent =
+        `${String(ovulation.getDate()).padStart(2, '0')}/${String(ovulation.getMonth() + 1).padStart(2, '0')}/${ovulation.getFullYear()}`;
+
+      let phaseDesc = tr.phaseFollicular;
+      if (cycleDay <= cycle.periodLength) {
+        phaseDesc = tr.phasePeriod;
+      } else if (cycleDay >= cycle.cycleLength - 16 && cycleDay <= cycle.cycleLength - 12) {
+        phaseDesc = tr.phaseOvul;
+      } else if (cycleDay >= cycle.cycleLength - 5) {
+        phaseDesc = tr.phasePms;
+      }
+      document.getElementById('cycle-phase-desc').textContent = phaseDesc;
+
+      const todayStr = getTodayStr();
+      let selectedSymptoms = cycle.symptomsByDate[todayStr] || [];
+      if (selectedSymptoms.length > 0 && typeof selectedSymptoms[0] === 'string') {
+        selectedSymptoms = [];
+      }
+
+      document.getElementById('symptom-chips').innerHTML = tr.symptoms.map((sym, idx) => {
+        const active = selectedSymptoms.includes(idx);
+        return `
+          <button onclick="toggleSymptom(${idx})"
+            class="px-2.5 py-1 rounded-full text-xs font-semibold transition border ${active ? 'bg-rose-500 text-white border-rose-500 shadow-sm' : 'bg-white/85 text-slate-600 border-slate-200 hover:bg-rose-50'}">
+            ${sym}
+          </button>
+        `;
+      }).join('');
+
+      const strip = document.getElementById('cycle-forecast-strip');
+      let stripHtml = '';
+      for (let i = 0; i < 14; i++) {
+        const d = new Date(todayZero);
+        d.setDate(todayZero.getDate() + i);
+        const dDiff = Math.floor((d - lastStart) / (1000 * 60 * 60 * 24));
+        const dCycleDay = dDiff >= 0 ? (dDiff % cycle.cycleLength) + 1 : 1;
+
+        const isPeriod = dCycleDay <= cycle.periodLength;
+        const isOvul = dCycleDay === (cycle.cycleLength - 14);
+
+        let badgeClass = 'bg-white/80 text-slate-700';
+        if (isPeriod) badgeClass = 'bg-rose-500 text-white font-bold shadow-sm';
+        else if (isOvul) badgeClass = 'bg-amber-400 text-slate-900 font-bold shadow-sm';
+
+        stripHtml += `
+          <div class="p-1.5 rounded-xl ${badgeClass} text-[11px]">
+            <div class="opacity-75 text-[9px]">${d.getDate()}/${d.getMonth() + 1}</div>
+            <div>N${dCycleDay}</div>
+          </div>
+        `;
+      }
+      strip.innerHTML = stripHtml;
+    }
+
+    function toggleSymptom(idx) {
+      const todayStr = getTodayStr();
+      if (!appState.health.cycle.symptomsByDate[todayStr]) {
+        appState.health.cycle.symptomsByDate[todayStr] = [];
+      }
+      const list = appState.health.cycle.symptomsByDate[todayStr];
+      const pos = list.indexOf(idx);
+      if (pos >= 0) list.splice(pos, 1);
+      else list.push(idx);
+
+      saveState();
+      renderCycleTracker();
+    }
+
+    function openCycleSettingsModal() {
+      const tr = t();
+      const cycle = appState.health.cycle;
+      document.getElementById('settings-modal-title').textContent = tr.cycleSettingsTitle;
+      document.getElementById('settings-modal-body').innerHTML = `
+        <div>
+          <label class="text-xs font-bold text-slate-600 block mb-1">${tr.cycleLenLabel}</label>
+          <input type="number" id="cycle-len-input" value="${cycle.cycleLength}" min="21" max="40"
+            class="w-full px-3.5 py-2 rounded-2xl bg-slate-50 border border-slate-200 text-sm font-bold" />
+        </div>
+        <div>
+          <label class="text-xs font-bold text-slate-600 block mb-1">${tr.periodLenLabel}</label>
+          <input type="number" id="period-len-input" value="${cycle.periodLength}" min="2" max="10"
+            class="w-full px-3.5 py-2 rounded-2xl bg-slate-50 border border-slate-200 text-sm font-bold" />
+        </div>
+        <button onclick="saveCycleSettings()" class="w-full py-2.5 rounded-2xl bg-rose-500 text-white text-sm font-bold">
+          ${tr.btnSaveSettings}
+        </button>
+      `;
+      const modal = document.getElementById('settings-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function saveCycleSettings() {
+      const cLen = parseInt(document.getElementById('cycle-len-input').value, 10);
+      const pLen = parseInt(document.getElementById('period-len-input').value, 10);
+      if (cLen >= 21 && cLen <= 40) appState.health.cycle.cycleLength = cLen;
+      if (pLen >= 2 && pLen <= 10) appState.health.cycle.periodLength = pLen;
+      saveState();
+      renderCycleTracker();
+      closeModal('settings-modal');
+      showToast('🌸', '🌸');
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    /* ==========================================================================
+       9. INITIALIZE APP ON LOAD
+       ========================================================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      const initialSeason = appState.seasonPrefs.auto
+        ? detectCurrentSeasonByDate()
+        : appState.seasonPrefs.manualSeason;
+      setSeason(initialSeason, false);
+      drawParticles();
+
+      applyTranslations();
+      updateHeaderSummary();
+      renderWeeklyView();
+    });
+  </script>
+</body>
+</html>
